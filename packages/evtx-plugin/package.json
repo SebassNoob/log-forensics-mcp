@@ -1,5 +1,5 @@
 {
-	"name": "evtx",
+	"name": "evtx-plugin",
 	"version": "0.1.0",
 	"private": true,
 	"main": "index.js",
@@ -9,7 +9,7 @@
 		"dev": "napi build --platform --watch"
 	},
 	"napi": {
-		"binaryName": "evtx"
+		"binaryName": "evtx-plugin"
 	},
 	"devDependencies": {
 		"@napi-rs/cli": "^3"

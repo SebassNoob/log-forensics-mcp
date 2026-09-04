@@ -1,7 +1,7 @@
 [workspace]
 
 [package]
-name = "evtx"
+name = "evtx-plugin"
 version = "0.1.0"
 edition = "2021"
 
@@ -9,7 +9,7 @@ edition = "2021"
 crate-type = ["cdylib"]
 
 [dependencies]
-napi = "3"
+napi = { version = "3", features = ["async", "tokio_fs", "tokio_rt"] }
 napi-derive = "3"
 
 [build-dependencies]

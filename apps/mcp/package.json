@@ -13,7 +13,7 @@
 		"check-types": "tsgo --noEmit"
 	},
 	"dependencies": {
-		"evtx": "workspace:*",
+		"evtx-plugin": "workspace:*",
 		"xmcp": "1.1.3",
 		"zod": "^4.0.0"
 	},

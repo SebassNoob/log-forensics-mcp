@@ -13,7 +13,7 @@ const config: XmcpConfig = {
 		externals: [
 			...(Array.isArray(config.externals) ? config.externals : []),
 			// The native addon is loaded by napi-rs at runtime; rspack cannot parse .node binaries.
-			{ evtx: "commonjs evtx" },
+			{ "evtx-plugin": "commonjs evtx-plugin" },
 		],
 	}),
 	template: {
