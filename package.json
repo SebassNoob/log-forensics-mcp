@@ -1,0 +1,21 @@
+{
+	"name": "log-forensics-mcp",
+	"private": true,
+	"packageManager": "bun@1.3.14",
+	"workspaces": [
+		"apps/*",
+		"packages/*"
+	],
+	"scripts": {
+		"build": "turbo run build",
+		"bundle": "turbo run build && bun build --compile --outfile dist/log-forensics-mcp apps/mcp/dist/http.js",
+		"dev": "turbo run dev",
+		"check-types": "turbo run check-types",
+		"lint": "biome check .",
+		"format": "biome check --write ."
+	},
+	"devDependencies": {
+		"@biomejs/biome": "^2.5.12",
+		"turbo": "^2.10.12"
+	}
+}

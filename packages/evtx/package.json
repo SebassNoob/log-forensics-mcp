@@ -1,0 +1,17 @@
+{
+	"name": "evtx",
+	"version": "0.1.0",
+	"private": true,
+	"main": "index.js",
+	"types": "index.d.ts",
+	"scripts": {
+		"build": "napi build --platform --release",
+		"dev": "napi build --platform --watch"
+	},
+	"napi": {
+		"binaryName": "evtx"
+	},
+	"devDependencies": {
+		"@napi-rs/cli": "^3"
+	}
+}

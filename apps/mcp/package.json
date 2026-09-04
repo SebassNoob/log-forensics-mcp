@@ -1,0 +1,25 @@
+{
+	"name": "mcp",
+	"version": "0.1.0",
+	"private": true,
+	"description": "Log forensics MCP server",
+	"engines": {
+		"node": ">=22.0.0"
+	},
+	"scripts": {
+		"build": "xmcp build",
+		"dev": "xmcp dev",
+		"start": "node dist/http.js",
+		"check-types": "tsgo --noEmit"
+	},
+	"dependencies": {
+		"evtx": "workspace:*",
+		"xmcp": "1.1.3",
+		"zod": "^4.0.0"
+	},
+	"devDependencies": {
+		"@rspack/core": "^1.7.12",
+		"typescript": "^7",
+		"@xmcp-dev/compiler": "1.1.3"
+	}
+}
