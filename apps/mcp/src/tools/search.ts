@@ -9,8 +9,7 @@ export const schema = {
 
 export const metadata: ToolMetadata = {
 	name: "search",
-	description:
-		"Searches a log file using whichever plugin recognises its file path. Throws if no plugin handles the path.",
+	description: "Search a log file and return the matching entries.",
 	annotations: {
 		title: "Search",
 		readOnlyHint: true,

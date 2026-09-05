@@ -8,8 +8,7 @@ export const schema = {
 
 export const metadata: ToolMetadata = {
 	name: "stat",
-	description:
-		"Describes a log file (format, size, timestamps, format-specific metadata) using whichever plugin recognises its file path. Throws if no plugin handles the path.",
+	description: "Get a log file's format, size, timestamps, and format-specific metadata.",
 	annotations: {
 		title: "Stat",
 		readOnlyHint: true,

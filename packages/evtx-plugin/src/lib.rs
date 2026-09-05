@@ -41,7 +41,7 @@ impl EvtxPlugin {
 
     #[napi(getter)]
     pub fn description(&self) -> String {
-        "File system access to Windows Event Log files (evtx)".to_string()
+        "File system access to Windows Event Log files (evtx).".to_string()
     }
 
     #[napi]

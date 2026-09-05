@@ -15,8 +15,7 @@ export const schema = {
 
 export const metadata: ToolMetadata = {
 	name: "read",
-	description:
-		"Reads a window of a log file using whichever plugin recognises its file path. Throws if no plugin handles the path.",
+	description: "Read a slice of a log file as text lines, starting at a byte offset.",
 	annotations: {
 		title: "Read",
 		readOnlyHint: true,

@@ -19,7 +19,7 @@ const config: XmcpConfig = {
 	}),
 	template: {
 		name: "log-forensics-mcp",
-		description: "MCP server for log forensics",
+		description: "MCP server for log forensics. Allows searching and reading supported log files.",
 	},
 };
 
