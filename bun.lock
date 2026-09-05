@@ -17,6 +17,7 @@
         "csv-plugin": "workspace:*",
         "evtx-plugin": "workspace:*",
         "journal-plugin": "workspace:*",
+        "plaintext-plugin": "workspace:*",
         "xmcp": "1.1.3",
         "zod": "^4.0.0",
       },
@@ -45,6 +46,13 @@
       "version": "0.1.0",
       "devDependencies": {
         "@napi-rs/cli": "^3",
+      },
+    },
+    "packages/plaintext-plugin": {
+      "name": "plaintext-plugin",
+      "version": "0.1.0",
+      "devDependencies": {
+        "@napi-rs/cli": "^3.9.0",
       },
     },
     "packages/utils": {
@@ -468,6 +476,8 @@
     "picocolors": ["picocolors@1.1.1", "", {}, "sha512-xceH2snhtb5M9liqDsmEw56le376mTZkEX/jEb/RxNFyegNul7eNslCXP9FDj/Lcu0X8KEyMceP2ntpaHrDEVA=="],
 
     "picomatch": ["picomatch@2.3.2", "", {}, "sha512-V7+vQEJ06Z+c5tSye8S+nHUfI51xoXIXjHQ99cQtKUkQqqO1kO/KCJUfZXuB47h/YBlDhah2H3hdUGXn8ie0oA=="],
+
+    "plaintext-plugin": ["plaintext-plugin@workspace:packages/plaintext-plugin"],
 
     "postcss": ["postcss@8.5.28", "", { "dependencies": { "nanoid": "^3.3.18", "picocolors": "^1.1.1", "source-map-js": "^1.2.1" } }, "sha512-RRuzqDtt5Y9h3quz5hWhK+TPnsmVs6WwSU6LkJMeY4HstUEDuYTG8UJSdawMRzmzAtV+KEoG8N3Qg2qLy5vM/A=="],
 

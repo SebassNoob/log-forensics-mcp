@@ -18,6 +18,7 @@ const config: XmcpConfig = {
 				"csv-plugin": "commonjs csv-plugin",
 				"evtx-plugin": "commonjs evtx-plugin",
 				"journal-plugin": "commonjs journal-plugin",
+				"plaintext-plugin": "commonjs plaintext-plugin",
 			},
 		],
 	}),
