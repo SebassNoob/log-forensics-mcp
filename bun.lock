@@ -15,6 +15,7 @@
       "version": "0.1.0",
       "dependencies": {
         "evtx-plugin": "workspace:*",
+        "journal-plugin": "workspace:*",
         "xmcp": "1.1.3",
         "zod": "^4.0.0",
       },
@@ -26,6 +27,13 @@
     },
     "packages/evtx-plugin": {
       "name": "evtx-plugin",
+      "version": "0.1.0",
+      "devDependencies": {
+        "@napi-rs/cli": "^3",
+      },
+    },
+    "packages/journal-plugin": {
+      "name": "journal-plugin",
       "version": "0.1.0",
       "devDependencies": {
         "@napi-rs/cli": "^3",
@@ -412,6 +420,8 @@
     "is-number": ["is-number@7.0.0", "", {}, "sha512-41Cifkg6e8TylSpdtTpeLVMqvSBEVzTttHvERD741+pnZ8ANv0004MRL43QKPDlK9cGvNp6NZWZUBlbGXYxxng=="],
 
     "jiti": ["jiti@2.7.0", "", { "bin": { "jiti": "lib/jiti-cli.mjs" } }, "sha512-AC/7JofJvZGrrneWNaEnJeOLUx+JlGt7tNa0wZiRPT4MY1wmfKjt2+6O2p2uz2+skll8OZZmJMNqeke7kKbNgQ=="],
+
+    "journal-plugin": ["journal-plugin@workspace:packages/journal-plugin"],
 
     "js-tokens": ["js-tokens@4.0.0", "", {}, "sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ=="],
 

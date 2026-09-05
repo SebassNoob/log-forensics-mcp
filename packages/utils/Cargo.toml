@@ -1,0 +1,11 @@
+[workspace]
+
+[package]
+name = "utils"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+napi = "3"
+time = { version = "0.3", features = ["formatting"] }
+tokio = { version = "1.53.1", features = ["rt"] }

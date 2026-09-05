@@ -1,6 +1,4 @@
-mod utils;
-
-use evtx::{EvtxFileHeader, HeaderFlags};
+use evtx::{EvtxFileHeader, EvtxParser, HeaderFlags, ParserSettings};
 use grep_matcher::Matcher;
 use grep_regex::RegexMatcherBuilder;
 use napi::{Error, Result};
@@ -10,7 +8,13 @@ use std::collections::HashMap;
 use std::fs::File;
 use std::io::Read;
 use std::path::Path;
-use utils::{blocking, iso8601, open};
+use utils::{blocking, iso8601};
+
+fn open(file_path: &str) -> Result<EvtxParser<File>> {
+    EvtxParser::from_path(file_path)
+        .map(|p| p.with_configuration(ParserSettings::default().indent(false)))
+        .map_err(|e| Error::from_reason(format!("Failed to open \"{file_path}\" as evtx: {e}")))
+}
 
 #[napi]
 #[derive(Default)]
