@@ -1,10 +1,10 @@
 mod utils;
 
 use evtx::{EvtxFileHeader, HeaderFlags};
+use grep_matcher::Matcher;
+use grep_regex::RegexMatcherBuilder;
 use napi::{Error, Result};
 use napi_derive::napi;
-use nucleo_matcher::pattern::{CaseMatching, Normalization, Pattern};
-use nucleo_matcher::{Config, Matcher, Utf32Str};
 use serde_json::{json, Value};
 use std::collections::HashMap;
 use std::fs::File;
@@ -64,43 +64,31 @@ impl EvtxPlugin {
 
 #[napi]
 impl EvtxTools {
-    /// Accepts fzf syntax.
     #[napi]
     pub async fn search(&self, file_path: String, search_term: String) -> Result<Vec<String>> {
-        const MAX_SEARCH_RESULTS: usize = 10;
         if search_term.trim().is_empty() {
             return Err(Error::from_reason("search_term must not be empty"));
         }
 
         blocking(move || {
+            let matcher = RegexMatcherBuilder::new()
+                .fixed_strings(true)
+                .case_smart(true)
+                .build(&search_term)
+                .map_err(|e| Error::from_reason(format!("Invalid search_term: {e}")))?;
             let mut parser = open(&file_path)?;
-            let pattern = Pattern::parse(&search_term, CaseMatching::Smart, Normalization::Smart);
-            let mut matcher = Matcher::new(Config::DEFAULT);
-            let mut buf = Vec::new();
-            let mut hits: Vec<(u32, String)> = Vec::new();
 
-            for record in parser.records_json() {
-                let Ok(record) = record else { continue };
-                let line = format!(
-                    "{}\t{}\t{}",
-                    record.event_record_id, record.timestamp, record.data
-                );
-                let Some(score) = pattern.score(Utf32Str::new(&line, &mut buf), &mut matcher)
-                else {
-                    continue;
-                };
-                // Resize to MAX_SEARCH_RESULTS and keep the best
-                if hits.len() == MAX_SEARCH_RESULTS {
-                    if score <= hits[hits.len() - 1].0 {
-                        continue;
-                    }
-                    hits.pop();
-                }
-                let at = hits.partition_point(|(s, _)| *s >= score);
-                hits.insert(at, (score, line));
-            }
-
-            Ok(hits.into_iter().map(|(_, line)| line).collect())
+            Ok(parser
+                .records_json()
+                .flatten()
+                .map(|record| {
+                    format!(
+                        "{}\t{}\t{}",
+                        record.event_record_id, record.timestamp, record.data
+                    )
+                })
+                .filter(|line| matcher.is_match(line.as_bytes()).unwrap_or(false))
+                .collect())
         })
         .await
     }
