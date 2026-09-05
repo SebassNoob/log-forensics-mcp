@@ -1,63 +1,182 @@
-// Skeleton: every method body is `todo!()`, so parameters are not yet read.
-// Delete this once the implementations land.
-#![allow(unused_variables)]
+mod utils;
 
-use napi::bindgen_prelude::Result;
+use evtx::{EvtxFileHeader, HeaderFlags};
+use napi::{Error, Result};
 use napi_derive::napi;
+use nucleo_matcher::pattern::{CaseMatching, Normalization, Pattern};
+use nucleo_matcher::{Config, Matcher, Utf32Str};
+use serde_json::{json, Value};
 use std::collections::HashMap;
+use std::fs::File;
+use std::io::Read;
+use std::path::Path;
+use utils::{blocking, iso8601, open};
 
-/// Search strategy for Windows Event Log files.
 #[napi]
 pub struct EvtxPlugin {}
 
-#[napi]
-impl EvtxPlugin {
-  #[napi(constructor)]
-  pub fn new() -> Self {
-    EvtxPlugin {}
-  }
-
-  #[napi(getter)]
-  pub fn name(&self) -> String {
-    todo!()
-  }
-
-  #[napi(getter)]
-  pub fn description(&self) -> String {
-    todo!()
-  }
-
-  /// Whether this plugin handles `file_path`. Detection is by path alone.
-  #[napi]
-  pub fn identify(&self, file_path: String) -> bool {
-    todo!()
-  }
-
-  #[napi(getter)]
-  pub fn tools(&self) -> EvtxTools {
-    EvtxTools {}
-  }
+#[napi(object)]
+pub struct FileStat {
+    pub format: String,
+    pub size_bytes: i64,
+    pub modified_at: String,
+    pub created_at: String,
+    pub metadata: HashMap<String, Value>,
 }
 
-/// The tools this plugin exposes. Each is optional on the TypeScript side, so
-/// an unsupported tool should return an error rather than a fabricated result.
 #[napi]
 pub struct EvtxTools {}
 
 #[napi]
+impl EvtxPlugin {
+    #[napi(constructor)]
+    pub fn new() -> Self {
+        EvtxPlugin {}
+    }
+
+    #[napi(getter)]
+    pub fn name(&self) -> String {
+        "evtx-plugin".to_string()
+    }
+
+    #[napi(getter)]
+    pub fn description(&self) -> String {
+        "File system access to Windows Event Log files (evtx)".to_string()
+    }
+
+    #[napi]
+    pub fn identify(&self, file_path: String) -> bool {
+        if Path::new(&file_path).extension() == Some("evtx".as_ref()) {
+            return true;
+        }
+        let Ok(mut file) = File::open(&file_path) else {
+            return false;
+        };
+        let mut magic = [0u8; 8];
+        file.read_exact(&mut magic).is_ok() && &magic == b"ElfFile\x00"
+    }
+
+    #[napi(getter)]
+    pub fn tools(&self) -> EvtxTools {
+        EvtxTools {}
+    }
+}
+
+#[napi]
 impl EvtxTools {
-  #[napi]
-  pub async fn search(&self, file_path: String, search_term: String) -> Result<Vec<String>> {
-    todo!()
-  }
+    /// Accepts fzf syntax.
+    #[napi]
+    pub async fn search(&self, file_path: String, search_term: String) -> Result<Vec<String>> {
+        const MAX_SEARCH_RESULTS: usize = 10;
+        if search_term.trim().is_empty() {
+            return Err(Error::from_reason("search_term must not be empty"));
+        }
 
-  #[napi]
-  pub async fn read(&self, file_path: String, offset: i64, max_bytes: i64) -> Result<Vec<String>> {
-    todo!()
-  }
+        blocking(move || {
+            let mut parser = open(&file_path)?;
+            let pattern = Pattern::parse(&search_term, CaseMatching::Smart, Normalization::Smart);
+            let mut matcher = Matcher::new(Config::DEFAULT);
+            let mut buf = Vec::new();
+            let mut hits: Vec<(u32, String)> = Vec::new();
 
-  #[napi]
-  pub async fn stat(&self, file_path: String) -> Result<HashMap<String, serde_json::Value>> {
-    todo!()
-  }
+            for record in parser.records_json() {
+                let Ok(record) = record else { continue };
+                let line = format!(
+                    "{}\t{}\t{}",
+                    record.event_record_id, record.timestamp, record.data
+                );
+                let Some(score) = pattern.score(Utf32Str::new(&line, &mut buf), &mut matcher)
+                else {
+                    continue;
+                };
+                // Resize to MAX_SEARCH_RESULTS and keep the best
+                if hits.len() == MAX_SEARCH_RESULTS {
+                    if score <= hits[hits.len() - 1].0 {
+                        continue;
+                    }
+                    hits.pop();
+                }
+                let at = hits.partition_point(|(s, _)| *s >= score);
+                hits.insert(at, (score, line));
+            }
+
+            Ok(hits.into_iter().map(|(_, line)| line).collect())
+        })
+        .await
+    }
+
+    #[napi]
+    pub async fn read(
+        &self,
+        file_path: String,
+        offset: i64,
+        max_bytes: i64,
+    ) -> Result<Vec<String>> {
+        if offset < 0 || max_bytes <= 0 {
+            return Err(Error::from_reason("need offset >= 0 and max_bytes > 0"));
+        }
+        let (offset, max_bytes) = (offset as u64, max_bytes as usize);
+
+        blocking(move || {
+            let mut lines = Vec::new();
+            let mut end = 0u64;
+            let mut taken = 0usize;
+
+            for record in open(&file_path)?.records_json().flatten() {
+                let line = format!(
+                    "{}\t{}\t{}",
+                    record.event_record_id, record.timestamp, record.data
+                );
+                end += line.len() as u64 + 1; // newline the caller joins on
+                if end <= offset {
+                    continue;
+                }
+                if taken > 0 && taken + line.len() > max_bytes {
+                    break;
+                }
+                taken += line.len();
+                lines.push(line);
+            }
+
+            Ok(lines)
+        })
+        .await
+    }
+
+    #[napi]
+    pub async fn stat(&self, file_path: String) -> Result<FileStat> {
+        blocking(move || {
+            let mut file = File::open(&file_path)
+                .map_err(|e| Error::from_reason(format!("Failed to open \"{file_path}\": {e}")))?;
+            let header = EvtxFileHeader::from_stream(&mut file).map_err(|e| {
+                Error::from_reason(format!("\"{file_path}\" is not a valid evtx file: {e}"))
+            })?;
+            let meta = file
+                .metadata()
+                .map_err(|e| Error::from_reason(format!("Failed to stat \"{file_path}\": {e}")))?;
+
+            let size = meta.len();
+            let Value::Object(metadata) = json!({
+                "version": format!("{}.{}", header.major_version, header.minor_version),
+                // header.chunk_count is a u16 and saturates on large logs; derive it instead.
+                "chunkCount": size.saturating_sub(header.header_block_size.into()) / 65536,
+                "firstChunkNumber": header.first_chunk_number,
+                "lastChunkNumber": header.last_chunk_number,
+                "nextRecordId": header.next_record_id,
+                "isDirty": header.flags.contains(HeaderFlags::DIRTY),
+                "isFull": header.flags.contains(HeaderFlags::FULL),
+            }) else {
+                unreachable!()
+            };
+
+            Ok(FileStat {
+                format: "evtx".to_string(),
+                size_bytes: size as i64,
+                modified_at: iso8601(meta.modified()),
+                created_at: iso8601(meta.created()),
+                metadata: metadata.into_iter().collect(),
+            })
+        })
+        .await
+    }
 }
