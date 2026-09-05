@@ -10,12 +10,6 @@ use std::io::Read;
 use std::path::Path;
 use utils::{blocking, iso8601};
 
-fn open(file_path: &str) -> Result<EvtxParser<File>> {
-    EvtxParser::from_path(file_path)
-        .map(|p| p.with_configuration(ParserSettings::default().indent(false)))
-        .map_err(|e| Error::from_reason(format!("Failed to open \"{file_path}\" as evtx: {e}")))
-}
-
 #[napi]
 #[derive(Default)]
 pub struct EvtxPlugin {}
@@ -70,6 +64,12 @@ impl EvtxPlugin {
 
 #[napi]
 impl EvtxTools {
+    fn open(file_path: &str) -> Result<EvtxParser<File>> {
+        EvtxParser::from_path(file_path)
+            .map(|p| p.with_configuration(ParserSettings::default().indent(false)))
+            .map_err(|e| Error::from_reason(format!("Failed to open \"{file_path}\" as evtx: {e}")))
+    }
+
     #[napi]
     pub async fn search(&self, file_path: String, search_term: String) -> Result<Vec<String>> {
         if search_term.trim().is_empty() {
@@ -82,7 +82,7 @@ impl EvtxTools {
                 .case_smart(true)
                 .build(&search_term)
                 .map_err(|e| Error::from_reason(format!("Invalid search_term: {e}")))?;
-            let mut parser = open(&file_path)?;
+            let mut parser = EvtxTools::open(&file_path)?;
 
             Ok(parser
                 .records_json()
@@ -116,7 +116,7 @@ impl EvtxTools {
             let mut end = 0u64;
             let mut taken = 0usize;
 
-            for record in open(&file_path)?.records_json().flatten() {
+            for record in EvtxTools::open(&file_path)?.records_json().flatten() {
                 let line = format!(
                     "{}\t{}\t{}",
                     record.event_record_id, record.timestamp, record.data
