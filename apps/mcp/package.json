@@ -15,6 +15,7 @@
 		"format": "biome check --write ."
 	},
 	"dependencies": {
+		"csv-plugin": "workspace:*",
 		"evtx-plugin": "workspace:*",
 		"journal-plugin": "workspace:*",
 		"xmcp": "1.1.3",

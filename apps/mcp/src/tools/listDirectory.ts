@@ -22,7 +22,9 @@ export const metadata: ToolMetadata = {
 
 export default async function listDirectoryTool({ dirPath }: InferSchema<typeof schema>) {
 	if (dirPath.startsWith("~")) {
-		throw new Error(`Please provide an absolute path instead of using ~ for home directory: ${homedir()}`);
+		throw new Error(
+			`Please provide an absolute path instead of using ~ for home directory: ${homedir()}`,
+		);
 	}
 	const names = (await readdir(dirPath)).sort();
 

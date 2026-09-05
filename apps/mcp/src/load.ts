@@ -1,9 +1,14 @@
+import { CsvPlugin } from "csv-plugin";
 import { EvtxPlugin } from "evtx-plugin";
 import { JournalPlugin } from "journal-plugin";
 import type { LogForensicsPlugin } from "./plugins";
 
 // plugins in priority order
-export const defaultPlugins: LogForensicsPlugin[] = [new EvtxPlugin(), new JournalPlugin()];
+export const defaultPlugins: LogForensicsPlugin[] = [
+	new EvtxPlugin(),
+	new JournalPlugin(),
+	new CsvPlugin(),
+];
 
 export function resolvePlugin(filePath: string): LogForensicsPlugin {
 	const plugin = defaultPlugins.find((candidate) => candidate.identify(filePath));
