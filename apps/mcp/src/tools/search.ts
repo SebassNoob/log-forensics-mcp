@@ -21,15 +21,15 @@ export const metadata: ToolMetadata = {
 
 export default async function searchTool({ filePath, searchTerm }: InferSchema<typeof schema>) {
 	const plugin = resolvePlugin(filePath);
-	const matches = await plugin.search(filePath, searchTerm);
 
-	const formatted = matches.map(
-		({ offset, encoding, context }) =>
-			`0x${offset.toString(16).padStart(8, "0")} ${encoding}: ${context}`,
-	);
+	if (!plugin.tools.search) {
+		throw new Error(`Plugin "${plugin.name}" does not support search.`);
+	}
 
-	const text = formatted.length
-		? `${plugin.name}: ${formatted.length} match(es) in ${filePath}\n${formatted.join("\n")}`
+	const matches = await plugin.tools.search(filePath, searchTerm);
+
+	const text = matches.length
+		? `${plugin.name}: ${matches.length} match(es) in ${filePath}\n${matches.join("\n")}`
 		: `${plugin.name}: no matches for "${searchTerm}" in ${filePath}`;
 
 	return { content: [{ type: "text" as const, text }] };

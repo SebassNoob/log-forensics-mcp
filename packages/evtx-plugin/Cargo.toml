@@ -9,8 +9,9 @@ edition = "2021"
 crate-type = ["cdylib"]
 
 [dependencies]
-napi = { version = "3", features = ["async", "tokio_fs", "tokio_rt"] }
+napi = { version = "3", features = ["async", "tokio_fs", "tokio_rt", "serde-json"] }
 napi-derive = "3"
+serde_json = "1"
 
 [build-dependencies]
 napi-build = "2"
