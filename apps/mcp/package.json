@@ -10,7 +10,9 @@
 		"build": "xmcp build",
 		"dev": "xmcp dev",
 		"start": "node dist/http.js",
-		"check-types": "tsgo --noEmit"
+		"check-types": "tsgo --noEmit",
+		"lint": "biome check .",
+		"format": "biome check --write ."
 	},
 	"dependencies": {
 		"evtx-plugin": "workspace:*",

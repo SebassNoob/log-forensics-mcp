@@ -6,7 +6,9 @@
 	"types": "index.d.ts",
 	"scripts": {
 		"build": "napi build --platform --release",
-		"dev": "napi build --platform --watch"
+		"dev": "napi build --platform --watch",
+		"format": "cargo fmt --all",
+		"lint": "cargo clippy --all-targets --all-features -- -D warnings"
 	},
 	"napi": {
 		"binaryName": "evtx-plugin"

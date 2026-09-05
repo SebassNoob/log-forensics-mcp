@@ -11,8 +11,8 @@
 		"bundle": "turbo run build && bun build --compile --outfile dist/log-forensics-mcp apps/mcp/dist/http.js",
 		"dev": "turbo run dev",
 		"check-types": "turbo run check-types",
-		"lint": "biome check .",
-		"format": "biome check --write ."
+		"lint": "turbo run lint",
+		"format": "turbo run format"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^2.5.12",
