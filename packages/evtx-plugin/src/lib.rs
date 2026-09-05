@@ -13,6 +13,7 @@ use std::path::Path;
 use utils::{blocking, iso8601, open};
 
 #[napi]
+#[derive(Default)]
 pub struct EvtxPlugin {}
 
 #[napi(object)]
@@ -25,6 +26,7 @@ pub struct FileStat {
 }
 
 #[napi]
+#[derive(Default)]
 pub struct EvtxTools {}
 
 #[napi]
