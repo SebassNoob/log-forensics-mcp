@@ -1,18 +1,15 @@
 import { EvtxPlugin } from "evtx-plugin";
+import { JournalPlugin } from "journal-plugin";
 import type { LogForensicsPlugin } from "./plugins";
 
-export const plugins: LogForensicsPlugin[] = [new EvtxPlugin()];
+// plugins in priority order
+export const defaultPlugins: LogForensicsPlugin[] = [new EvtxPlugin(), new JournalPlugin()];
 
-/**
- * Picks the first plugin that claims `filePath`. Detection is delegated to the
- * plugin itself, so a plugin is only ever activated for paths it recognises; an
- * unrecognised path is an error rather than a silent no-op.
- */
 export function resolvePlugin(filePath: string): LogForensicsPlugin {
-	const plugin = plugins.find((candidate) => candidate.identify(filePath));
+	const plugin = defaultPlugins.find((candidate) => candidate.identify(filePath));
 
 	if (!plugin) {
-		const registered = plugins.map((candidate) => candidate.name).join(", ");
+		const registered = defaultPlugins.map((candidate) => candidate.name).join(", ");
 		throw new Error(
 			`No plugin handles "${filePath}". Registered plugins: ${registered || "none"}.`,
 		);
