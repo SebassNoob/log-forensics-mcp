@@ -1,143 +1,132 @@
-use pcap_parser::data::{get_packetdata, PacketData, ETHERTYPE_IPV4, ETHERTYPE_IPV6};
-use pcap_parser::Linktype;
-use serde_json::{Map, Value};
-use std::net::{Ipv4Addr, Ipv6Addr};
+use pcap_parser::traits::{PcapNGPacketBlock, PcapReaderIterator};
+use pcap_parser::PcapHeader;
+use pcap_parser::{Block, PcapBlockOwned, PcapError};
+use utils::unix_epoch_to_iso8601;
 
-#[derive(Clone, Copy)]
-struct Network<'a> {
-    ethertype: u16,
-    packet: &'a [u8],
+pub enum PcapType {
+    Legacy,
+    NG,
 }
 
-#[derive(Clone, Copy)]
-struct Transport<'a> {
-    protocol: u8,
-    segment: &'a [u8],
+pub fn get_type(reader: &mut dyn PcapReaderIterator) -> Result<PcapType, PcapError<&'static [u8]>> {
+    // The first block identifies the format: a legacy pcap file header, or a pcapng section
+    // header block.
+    let (_, block) = reader.next().map_err(|e| e.to_owned_vec())?;
+    match block {
+        PcapBlockOwned::LegacyHeader(_) => Ok(PcapType::Legacy),
+        PcapBlockOwned::NG(Block::SectionHeader(_)) => Ok(PcapType::NG),
+        _ => Err(PcapError::HeaderNotRecognized),
+    }
 }
 
-/// Addresses, ports and flags an analyst would search a capture for. Anything below the transport
-/// header, or behind an unsupported link type, is left undecoded.
-pub fn describe(data: &[u8], linktype: Linktype) -> Map<String, Value> {
-    let mut fields = Map::new();
+pub struct Capture {
+    pub linktype: String,
+    pub snaplen: u32,
+    pub packets: Vec<Packet>,
+}
 
-    let network = match get_packetdata(data, linktype, data.len()) {
-        Some(PacketData::L2(frame)) => ethernet(frame, &mut fields),
-        Some(PacketData::L3(ethertype, packet)) => Some(Network { ethertype, packet }),
-        Some(PacketData::L4(protocol, segment)) => {
-            transport(Transport { protocol, segment }, &mut fields);
-            None
+pub struct Packet {
+    pub timestamp: String,
+    pub caplen: u32,
+    pub origlen: u32,
+    pub data: Vec<u8>,
+}
+
+pub fn legacy(reader: &mut dyn PcapReaderIterator) -> Result<Capture, PcapError<&'static [u8]>> {
+    let mut header = None;
+    let mut packets = Vec::new();
+    loop {
+        match reader.next() {
+            Ok((offset, block)) => {
+                match block {
+                    PcapBlockOwned::LegacyHeader(h) => header = Some(h),
+                    PcapBlockOwned::Legacy(p) => {
+                        // Nanosecond captures put nanos in ts_usec.
+                        let scale = match header.as_ref().map(PcapHeader::is_nanosecond_precision) {
+                            Some(true) => 1000,
+                            _ => 1,
+                        };
+                        packets.push(Packet {
+                            timestamp: unix_epoch_to_iso8601(
+                                p.ts_sec as u64 * 1_000_000 + (p.ts_usec / scale) as u64,
+                            ),
+                            caplen: p.caplen,
+                            origlen: p.origlen,
+                            data: p.data.to_vec(),
+                        });
+                    }
+                    _ => return Err(PcapError::HeaderNotRecognized),
+                }
+                reader.consume(offset);
+            }
+            Err(PcapError::Eof) => break,
+            Err(PcapError::Incomplete(_)) => reader.refill().map_err(|e| e.to_owned_vec())?,
+            Err(e) => return Err(e.to_owned_vec()),
         }
-        _ => None,
-    };
-
-    if let Some(segment) = network.and_then(|network| ip(network, &mut fields)) {
-        transport(segment, &mut fields);
     }
-
-    fields
-}
-
-fn ethernet<'a>(frame: &'a [u8], fields: &mut Map<String, Value>) -> Option<Network<'a>> {
-    let mac = |offset: usize| {
-        frame[offset..offset + 6]
-            .iter()
-            .map(|byte| format!("{byte:02x}"))
-            .collect::<Vec<_>>()
-            .join(":")
-    };
-    let mut ethertype = u16::from_be_bytes(frame.get(12..14)?.try_into().ok()?);
-    fields.insert("srcMac".into(), mac(6).into());
-    fields.insert("dstMac".into(), mac(0).into());
-
-    // 802.1Q/802.1ad tags sit between the ethertype and the network header.
-    let mut offset = 14;
-    while matches!(ethertype, 0x8100 | 0x88a8) {
-        ethertype = u16::from_be_bytes(frame.get(offset + 2..offset + 4)?.try_into().ok()?);
-        offset += 4;
-    }
-
-    Some(Network {
-        ethertype,
-        packet: frame.get(offset..)?,
+    let header = header.ok_or(PcapError::HeaderNotRecognized)?;
+    Ok(Capture {
+        linktype: header.network.to_string(),
+        snaplen: header.snaplen,
+        packets,
     })
 }
 
-fn ip<'a>(network: Network<'a>, fields: &mut Map<String, Value>) -> Option<Transport<'a>> {
-    let packet = network.packet;
-    let transport = match network.ethertype {
-        ETHERTYPE_IPV4 => {
-            let addr = |offset: usize| -> Option<String> {
-                let octets: [u8; 4] = packet.get(offset..offset + 4)?.try_into().ok()?;
-                Some(Ipv4Addr::from(octets).to_string())
-            };
-            fields.insert("srcIp".into(), addr(12)?.into());
-            fields.insert("dstIp".into(), addr(16)?.into());
-            Transport {
-                protocol: *packet.get(9)?,
-                segment: packet.get((packet[0] & 0x0f) as usize * 4..)?,
+pub fn ng(reader: &mut dyn PcapReaderIterator) -> Result<Capture, PcapError<&'static [u8]>> {
+    let mut capture = None;
+    let mut resolution = 1_000_000;
+    let mut ts_offset = 0;
+    loop {
+        match reader.next() {
+            Ok((offset, block)) => {
+                match block {
+                    // Packet timestamps are raw counts, decoded with the resolution and offset of
+                    // the interface they were captured on.
+                    PcapBlockOwned::NG(Block::InterfaceDescription(idb)) if capture.is_none() => {
+                        resolution = idb.ts_resolution().ok_or(PcapError::HeaderNotRecognized)?;
+                        ts_offset = idb.ts_offset();
+                        capture = Some(Capture {
+                            linktype: idb.linktype.to_string(),
+                            snaplen: idb.snaplen,
+                            packets: Vec::new(),
+                        });
+                    }
+                    PcapBlockOwned::NG(Block::EnhancedPacket(epb)) => {
+                        let (secs, frac) = epb.decode_ts(ts_offset as u64, resolution);
+                        capture
+                            .as_mut()
+                            .ok_or(PcapError::HeaderNotRecognized)?
+                            .packets
+                            .push(Packet {
+                                timestamp: unix_epoch_to_iso8601(
+                                    secs as u64 * 1_000_000
+                                        + (frac as u128 * 1_000_000 / resolution as u128) as u64,
+                                ),
+                                caplen: epb.caplen,
+                                origlen: epb.origlen,
+                                data: epb.packet_data().to_vec(),
+                            });
+                    }
+                    // Simple packets carry no timestamp.
+                    PcapBlockOwned::NG(Block::SimplePacket(spb)) => capture
+                        .as_mut()
+                        .ok_or(PcapError::HeaderNotRecognized)?
+                        .packets
+                        .push(Packet {
+                            timestamp: String::new(),
+                            caplen: spb.packet_data().len() as u32,
+                            origlen: spb.origlen,
+                            data: spb.packet_data().to_vec(),
+                        }),
+                    PcapBlockOwned::NG(_) => (),
+                    _ => return Err(PcapError::HeaderNotRecognized),
+                }
+                reader.consume(offset);
             }
-        }
-        ETHERTYPE_IPV6 => {
-            let addr = |offset: usize| -> Option<String> {
-                let octets: [u8; 16] = packet.get(offset..offset + 16)?.try_into().ok()?;
-                Some(Ipv6Addr::from(octets).to_string())
-            };
-            fields.insert("srcIp".into(), addr(8)?.into());
-            fields.insert("dstIp".into(), addr(24)?.into());
-            Transport {
-                protocol: *packet.get(6)?,
-                segment: packet.get(40..)?,
-            }
-        }
-        _ => return None,
-    };
-
-    fields.insert(
-        "protocol".into(),
-        match transport.protocol {
-            1 => "ICMP".to_string(),
-            6 => "TCP".to_string(),
-            17 => "UDP".to_string(),
-            47 => "GRE".to_string(),
-            50 => "ESP".to_string(),
-            58 => "ICMPv6".to_string(),
-            other => other.to_string(),
-        }
-        .into(),
-    );
-
-    Some(transport)
-}
-
-fn transport(transport: Transport, fields: &mut Map<String, Value>) {
-    if !matches!(transport.protocol, 6 | 17) {
-        return;
-    }
-    let segment = transport.segment;
-
-    let port = |offset: usize| -> Option<u16> {
-        Some(u16::from_be_bytes(
-            segment.get(offset..offset + 2)?.try_into().ok()?,
-        ))
-    };
-    let Some(src) = port(0) else {
-        return;
-    };
-    let Some(dst) = port(2) else {
-        return;
-    };
-    fields.insert("srcPort".into(), src.into());
-    fields.insert("dstPort".into(), dst.into());
-
-    if transport.protocol == 6 {
-        if let Some(bits) = segment.get(13) {
-            let flags: Vec<&str> = ["FIN", "SYN", "RST", "PSH", "ACK", "URG", "ECE", "CWR"]
-                .into_iter()
-                .enumerate()
-                .filter(|(bit, _)| bits & (1 << bit) != 0)
-                .map(|(_, name)| name)
-                .collect();
-            fields.insert("tcpFlags".into(), flags.join(",").into());
+            Err(PcapError::Eof) => break,
+            Err(PcapError::Incomplete(_)) => reader.refill().map_err(|e| e.to_owned_vec())?,
+            Err(e) => return Err(e.to_owned_vec()),
         }
     }
+    capture.ok_or(PcapError::HeaderNotRecognized)
 }
