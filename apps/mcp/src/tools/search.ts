@@ -4,12 +4,16 @@ import { resolvePlugin } from "../load";
 
 export const schema = {
 	filePath: z.string().describe("Path to the log file to search"),
-	searchTerm: z.string().min(1).describe("Term to look for in the file"),
+	searchTerm: z
+		.string()
+		.min(1)
+		.describe("Plaintext term to look for in the file, matched literally rather than as a regex"),
 };
 
 export const metadata: ToolMetadata = {
 	name: "search",
-	description: "Search a log file and return the matching entries.",
+	description:
+		"Search a log file and return the matching entries. The search term is plaintext: it is matched as a literal substring, not a regular expression, so regex syntax is looked for verbatim and will not match. Searching is case-insensitive unless the term contains an uppercase letter.",
 	annotations: {
 		title: "Search",
 		readOnlyHint: true,

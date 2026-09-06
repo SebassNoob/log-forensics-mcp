@@ -46,21 +46,7 @@ impl CsvPlugin {
     #[napi]
     pub fn identify(&self, file_path: String) -> bool {
         let extension = Path::new(&file_path).extension();
-        if extension == Some("csv".as_ref()) || extension == Some("tsv".as_ref()) {
-            return true;
-        }
-        // Otherwise only claim the file if a header and a first row agree on shape.
-        let Ok(mut reader) = open(&file_path) else {
-            return false;
-        };
-        let Ok(headers) = reader.headers().cloned() else {
-            return false;
-        };
-        headers.len() > 1
-            && reader
-                .records()
-                .next()
-                .is_some_and(|record| record.is_ok_and(|record| record.len() == headers.len()))
+        extension == Some("csv".as_ref()) || extension == Some("tsv".as_ref())
     }
 
     #[napi(getter)]

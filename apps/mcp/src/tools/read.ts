@@ -4,18 +4,24 @@ import { resolvePlugin } from "../load";
 
 export const schema = {
 	filePath: z.string().describe("Path to the log file to read"),
-	offset: z.number().int().min(0).default(0).describe("Byte offset to start reading from"),
+	offset: z
+		.number()
+		.int()
+		.min(0)
+		.default(0)
+		.describe("Approximate byte offset to start reading from"),
 	maxBytes: z
 		.number()
 		.int()
 		.positive()
 		.default(65536)
-		.describe("Maximum number of bytes to return"),
+		.describe("Approximate maximum number of bytes to return"),
 };
 
 export const metadata: ToolMetadata = {
 	name: "read",
-	description: "Read a slice of a log file as text lines, starting at a byte offset.",
+	description:
+		"Read a slice of a log file as text lines, starting at a byte offset. Both offset and maxBytes are estimates over the formatted output rather than exact positions in the file, so a slice may start and end a little outside the range asked for.",
 	annotations: {
 		title: "Read",
 		readOnlyHint: true,
