@@ -7,8 +7,8 @@
 		"node": ">=22.0.0"
 	},
 	"scripts": {
-		"build": "xmcp build",
-		"dev": "xmcp dev",
+		"build": "XMCP_TELEMETRY_DISABLED=true xmcp build",
+		"dev": "XMCP_TELEMETRY_DISABLED=true xmcp dev",
 		"start": "node dist/http.js",
 		"check-types": "tsgo --noEmit",
 		"lint": "biome check .",
