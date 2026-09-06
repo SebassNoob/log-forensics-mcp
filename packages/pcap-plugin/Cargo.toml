@@ -1,0 +1,22 @@
+[workspace]
+
+[package]
+name = "pcap-plugin"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+grep-matcher = "0.1"
+grep-regex = "0.1"
+napi = { version = "3", features = ["async", "tokio_fs", "tokio_rt", "serde-json"] }
+napi-derive = "3"
+pcap-parser = { version = "0.17", features = ["data"] }
+serde_json = "1"
+tokio = { version = "1.53.1", features = ["fs", "io-util"] }
+utils = { path = "../utils" }
+
+[build-dependencies]
+napi-build = "2"
