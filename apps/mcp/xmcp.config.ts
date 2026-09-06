@@ -6,7 +6,7 @@ const config: XmcpConfig = {
 	stdio: true,
 	paths: {
 		tools: "./src/tools",
-		prompts: false,
+		prompts: "./src/prompts",
 		resources: false,
 	},
 	bundler: (config: RspackOptions): RspackOptions => ({
@@ -25,6 +25,8 @@ const config: XmcpConfig = {
 	template: {
 		name: "log-forensics-mcp",
 		description: "MCP server for log forensics. Allows searching and reading supported log files.",
+		instructions:
+			"You should call `list_directory` and `list_supported_formats` to see what you can do. Search for IOCs and construct timelines with the tools `search` and `read`.",
 	},
 };
 
