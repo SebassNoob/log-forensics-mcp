@@ -7,6 +7,7 @@ use napi::{Error, Result};
 use napi_derive::napi;
 use pcap_parser::create_reader;
 use pcap_parser::traits::PcapReaderIterator;
+use pcap_parser::PcapError;
 use serde_json::{json, Value};
 use std::collections::HashMap;
 use std::fs::File;
@@ -89,11 +90,20 @@ impl PcapTools {
     fn parse(file_path: &str) -> Result<Capture> {
         let mut reader = PcapTools::open(file_path)?;
         let capture = match get_type(reader.as_mut()) {
-            Ok(PcapType::Legacy) => legacy(reader.as_mut()),
-            Ok(PcapType::NG) => ng(reader.as_mut()),
+            Ok(PcapType::Legacy) => legacy(reader),
+            Ok(PcapType::NG) => ng(reader),
             Err(e) => Err(e),
         };
         capture.map_err(|e| {
+            Error::from_reason(format!("Failed to parse \"{file_path}\" as pcap: {e}"))
+        })
+    }
+
+    fn packet(
+        packet: std::result::Result<Packet, PcapError<&'static [u8]>>,
+        file_path: &str,
+    ) -> Result<Packet> {
+        packet.map_err(|e| {
             Error::from_reason(format!("Failed to parse \"{file_path}\" as pcap: {e}"))
         })
     }
@@ -131,13 +141,15 @@ impl PcapTools {
                 .build(&search_term)
                 .map_err(|e| Error::from_reason(format!("Invalid search_term: {e}")))?;
 
-            Ok(PcapTools::parse(&file_path)?
-                .packets
-                .iter()
-                .enumerate()
-                .map(|(index, packet)| PcapTools::line(index, packet))
-                .filter(|line| matcher.is_match(line.as_bytes()).unwrap_or(false))
-                .collect())
+            let mut lines = Vec::new();
+            for (index, packet) in PcapTools::parse(&file_path)?.packets.enumerate() {
+                let line = PcapTools::line(index, &PcapTools::packet(packet, &file_path)?);
+                if matcher.is_match(line.as_bytes()).unwrap_or(false) {
+                    lines.push(line);
+                }
+            }
+
+            Ok(lines)
         })
         .await
     }
@@ -159,8 +171,8 @@ impl PcapTools {
             let mut end = 0u64;
             let mut taken = 0usize;
 
-            for (index, packet) in PcapTools::parse(&file_path)?.packets.iter().enumerate() {
-                let line = PcapTools::line(index, packet);
+            for (index, packet) in PcapTools::parse(&file_path)?.packets.enumerate() {
+                let line = PcapTools::line(index, &PcapTools::packet(packet, &file_path)?);
                 end += line.len() as u64 + 1; // newline the caller joins on
                 if end <= offset {
                     continue;
@@ -184,13 +196,24 @@ impl PcapTools {
                 .and_then(|file| file.metadata())
                 .map_err(|e| Error::from_reason(format!("Failed to stat \"{file_path}\": {e}")))?;
             let capture = PcapTools::parse(&file_path)?;
+            let mut count = 0usize;
+            let mut first = None;
+            let mut last = None;
+            for packet in capture.packets {
+                let packet = PcapTools::packet(packet, &file_path)?;
+                if count == 0 {
+                    first = Some(packet.timestamp.clone());
+                }
+                last = Some(packet.timestamp);
+                count += 1;
+            }
 
             let Value::Object(metadata) = json!({
                 "linktype": capture.linktype,
                 "snaplen": capture.snaplen,
-                "packetCount": capture.packets.len(),
-                "firstPacket": capture.packets.first().map(|packet| &packet.timestamp),
-                "lastPacket": capture.packets.last().map(|packet| &packet.timestamp),
+                "packetCount": count,
+                "firstPacket": first,
+                "lastPacket": last,
             }) else {
                 unreachable!()
             };

@@ -10,8 +10,7 @@ pub enum PcapType {
 }
 
 pub fn get_type(reader: &mut dyn PcapReaderIterator) -> Result<PcapType, PcapError<&'static [u8]>> {
-    // The first block identifies the format: a legacy pcap file header, or a pcapng section
-    // header block.
+    // The first block identifies the format
     let (_, block) = reader.next().map_err(|e| e.to_owned_vec())?;
     match block {
         PcapBlockOwned::LegacyHeader(_) => Ok(PcapType::Legacy),
@@ -23,7 +22,7 @@ pub fn get_type(reader: &mut dyn PcapReaderIterator) -> Result<PcapType, PcapErr
 pub struct Capture {
     pub linktype: String,
     pub snaplen: u32,
-    pub packets: Vec<Packet>,
+    pub packets: Box<dyn Iterator<Item = Result<Packet, PcapError<&'static [u8]>>>>,
 }
 
 pub struct Packet {
@@ -129,76 +128,121 @@ fn decode(data: &[u8], linktype: Linktype) -> Frame {
     }
 }
 
-pub fn legacy(reader: &mut dyn PcapReaderIterator) -> Result<Capture, PcapError<&'static [u8]>> {
-    let mut header = None;
-    let mut packets = Vec::new();
-    loop {
-        match reader.next() {
-            Ok((offset, block)) => {
-                match block {
-                    PcapBlockOwned::LegacyHeader(h) => header = Some(h),
-                    PcapBlockOwned::Legacy(p) => {
-                        let header = header.as_ref().ok_or(PcapError::HeaderNotRecognized)?;
-                        // Nanosecond captures put nanos in ts_usec.
-                        let scale = if header.is_nanosecond_precision() {
-                            1000
-                        } else {
-                            1
-                        };
-                        packets.push(Packet {
-                            timestamp: unix_epoch_to_iso8601(
-                                p.ts_sec as u64 * 1_000_000 + (p.ts_usec / scale) as u64,
-                            ),
-                            caplen: p.caplen,
-                            origlen: p.origlen,
-                            data: decode(p.data, header.network),
-                        });
-                    }
-                    _ => return Err(PcapError::HeaderNotRecognized),
-                }
-                reader.consume(offset);
-            }
-            Err(PcapError::Eof) => break,
-            Err(PcapError::Incomplete(_)) => reader.refill().map_err(|e| e.to_owned_vec())?,
-            Err(e) => return Err(e.to_owned_vec()),
+fn recover(
+    reader: &mut dyn PcapReaderIterator,
+    error: PcapError<&'static [u8]>,
+) -> Result<bool, PcapError<&'static [u8]>> {
+    match error {
+        PcapError::Eof => Ok(false),
+        PcapError::Incomplete(_) => {
+            reader.refill().map_err(|e| e.to_owned_vec())?;
+            Ok(true)
         }
+        PcapError::BufferTooSmall => {
+            let size = reader.data().len().max(65536) * 2;
+            if reader.grow(size) {
+                Ok(true)
+            } else {
+                Err(PcapError::BufferTooSmall)
+            }
+        }
+        error => Err(error),
     }
-    let header = header.ok_or(PcapError::HeaderNotRecognized)?;
+}
+
+pub fn legacy(
+    mut reader: Box<dyn PcapReaderIterator + Send>,
+) -> Result<Capture, PcapError<&'static [u8]>> {
+    let header = loop {
+        match reader.next() {
+            Ok((offset, PcapBlockOwned::LegacyHeader(header))) => {
+                reader.consume(offset);
+                break header;
+            }
+            Ok(_) => return Err(PcapError::HeaderNotRecognized),
+            Err(error) => {
+                let error = error.to_owned_vec();
+                if !recover(reader.as_mut(), error)? {
+                    return Err(PcapError::HeaderNotRecognized);
+                }
+            }
+        }
+    };
+    // Nanosecond captures put nanos in ts_usec.
+    let scale = if header.is_nanosecond_precision() {
+        1000
+    } else {
+        1
+    };
+
     Ok(Capture {
         linktype: header.network.to_string(),
         snaplen: header.snaplen,
-        packets,
+        packets: Box::new(std::iter::from_fn(move || loop {
+            match reader.next() {
+                Ok((offset, PcapBlockOwned::Legacy(block))) => {
+                    let packet = Packet {
+                        timestamp: unix_epoch_to_iso8601(
+                            block.ts_sec as u64 * 1_000_000 + (block.ts_usec / scale) as u64,
+                        ),
+                        caplen: block.caplen,
+                        origlen: block.origlen,
+                        data: decode(block.data, header.network),
+                    };
+                    reader.consume(offset);
+                    return Some(Ok(packet));
+                }
+                Ok(_) => return Some(Err(PcapError::HeaderNotRecognized)),
+                Err(error) => {
+                    let error = error.to_owned_vec();
+                    match recover(reader.as_mut(), error) {
+                        Ok(true) => (),
+                        Ok(false) => return None,
+                        Err(error) => return Some(Err(error)),
+                    }
+                }
+            }
+        })),
     })
 }
 
-pub fn ng(reader: &mut dyn PcapReaderIterator) -> Result<Capture, PcapError<&'static [u8]>> {
-    let mut capture = None;
-    let mut linktype = Linktype(0);
-    let mut resolution = 1_000_000;
-    let mut ts_offset = 0;
+pub fn ng(
+    mut reader: Box<dyn PcapReaderIterator + Send>,
+) -> Result<Capture, PcapError<&'static [u8]>> {
+    let linktype;
+    let snaplen;
+    let resolution;
+    let ts_offset;
     loop {
         match reader.next() {
-            Ok((offset, block)) => {
-                match block {
-                    // Packet timestamps are raw counts, decoded with the resolution and offset of
-                    // the interface they were captured on.
-                    PcapBlockOwned::NG(Block::InterfaceDescription(idb)) if capture.is_none() => {
-                        linktype = idb.linktype;
-                        resolution = idb.ts_resolution().ok_or(PcapError::HeaderNotRecognized)?;
-                        ts_offset = idb.ts_offset();
-                        capture = Some(Capture {
-                            linktype: idb.linktype.to_string(),
-                            snaplen: idb.snaplen,
-                            packets: Vec::new(),
-                        });
-                    }
-                    PcapBlockOwned::NG(Block::EnhancedPacket(epb)) => {
-                        let (secs, frac) = epb.decode_ts(ts_offset as u64, resolution);
-                        capture
-                            .as_mut()
-                            .ok_or(PcapError::HeaderNotRecognized)?
-                            .packets
-                            .push(Packet {
+            Ok((offset, PcapBlockOwned::NG(Block::InterfaceDescription(idb)))) => {
+                linktype = idb.linktype;
+                snaplen = idb.snaplen;
+                resolution = idb.ts_resolution().ok_or(PcapError::HeaderNotRecognized)?;
+                ts_offset = idb.ts_offset();
+                reader.consume(offset);
+                break;
+            }
+            Ok((offset, _)) => reader.consume(offset),
+            Err(error) => {
+                let error = error.to_owned_vec();
+                if !recover(reader.as_mut(), error)? {
+                    return Err(PcapError::HeaderNotRecognized);
+                }
+            }
+        }
+    }
+
+    Ok(Capture {
+        linktype: linktype.to_string(),
+        snaplen,
+        packets: Box::new(std::iter::from_fn(move || loop {
+            match reader.next() {
+                Ok((offset, PcapBlockOwned::NG(block))) => {
+                    let packet = match block {
+                        Block::EnhancedPacket(epb) => {
+                            let (secs, frac) = epb.decode_ts(ts_offset as u64, resolution);
+                            Some(Packet {
                                 timestamp: unix_epoch_to_iso8601(
                                     secs as u64 * 1_000_000
                                         + (frac as u128 * 1_000_000 / resolution as u128) as u64,
@@ -206,28 +250,32 @@ pub fn ng(reader: &mut dyn PcapReaderIterator) -> Result<Capture, PcapError<&'st
                                 caplen: epb.caplen,
                                 origlen: epb.origlen,
                                 data: decode(epb.packet_data(), linktype),
-                            });
-                    }
-                    // Simple packets carry no timestamp.
-                    PcapBlockOwned::NG(Block::SimplePacket(spb)) => capture
-                        .as_mut()
-                        .ok_or(PcapError::HeaderNotRecognized)?
-                        .packets
-                        .push(Packet {
+                            })
+                        }
+                        // Simple packets carry no timestamp.
+                        Block::SimplePacket(spb) => Some(Packet {
                             timestamp: String::new(),
                             caplen: spb.packet_data().len() as u32,
                             origlen: spb.origlen,
                             data: decode(spb.packet_data(), linktype),
                         }),
-                    PcapBlockOwned::NG(_) => (),
-                    _ => return Err(PcapError::HeaderNotRecognized),
+                        _ => None,
+                    };
+                    reader.consume(offset);
+                    if let Some(packet) = packet {
+                        return Some(Ok(packet));
+                    }
                 }
-                reader.consume(offset);
+                Ok(_) => return Some(Err(PcapError::HeaderNotRecognized)),
+                Err(error) => {
+                    let error = error.to_owned_vec();
+                    match recover(reader.as_mut(), error) {
+                        Ok(true) => (),
+                        Ok(false) => return None,
+                        Err(error) => return Some(Err(error)),
+                    }
+                }
             }
-            Err(PcapError::Eof) => break,
-            Err(PcapError::Incomplete(_)) => reader.refill().map_err(|e| e.to_owned_vec())?,
-            Err(e) => return Err(e.to_owned_vec()),
-        }
-    }
-    capture.ok_or(PcapError::HeaderNotRecognized)
+        })),
+    })
 }
