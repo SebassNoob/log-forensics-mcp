@@ -79,8 +79,11 @@ impl PcapPlugin {
 #[napi]
 impl PcapTools {
     fn open(file_path: &str) -> Result<Box<dyn PcapReaderIterator + Send>> {
-        let file = File::open(file_path).map_err(|e| Error::from_reason(e.to_string()))?;
-        create_reader(65536, file).map_err(|e| Error::from_reason(e.to_string()))
+        let file = File::open(file_path)
+            .map_err(|e| Error::from_reason(format!("Failed to open \"{file_path}\": {e}")))?;
+        create_reader(65536, file).map_err(|e| {
+            Error::from_reason(format!("\"{file_path}\" is not a valid pcap file: {e}"))
+        })
     }
 
     fn parse(file_path: &str) -> Result<Capture> {
@@ -95,16 +98,15 @@ impl PcapTools {
         })
     }
 
-    // Payload as printable text, so a search term hits the bytes on the wire.
     fn line(index: usize, packet: &Packet) -> String {
-        let payload: String = packet
-            .data
-            .iter()
-            .map(|&byte| match byte {
-                b' '..=b'~' => byte as char,
-                _ => '.',
-            })
-            .collect();
+        let mut payload = String::new();
+        for &byte in &packet.data {
+            match byte {
+                b' '..=b'~' => payload.push(byte as char),
+                _ if !payload.ends_with('.') => payload.push('.'),
+                _ => (),
+            }
+        }
         format!(
             "{index}\t{}\t{}/{}\t{payload}",
             packet.timestamp, packet.caplen, packet.origlen
