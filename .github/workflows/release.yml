@@ -1,0 +1,67 @@
+name: release
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: ${{ matrix.name }}
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { name: linux-x64, runner: ubuntu-latest }
+          - { name: linux-arm64, runner: ubuntu-24.04-arm }
+          - { name: darwin-x64, runner: macos-15-intel }
+          - { name: darwin-arm64, runner: macos-latest }
+          - { name: windows-x64, runner: windows-latest, ext: .exe }
+    steps:
+      - uses: actions/checkout@v5
+      - uses: oven-sh/setup-bun@v2
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+        with:
+          # Each plugin is its own Cargo workspace with its own target dir.
+          workspaces: |
+            packages/csv-plugin
+            packages/evtx-plugin
+            packages/journal-plugin
+            packages/pcap-plugin
+            packages/plaintext-plugin
+          key: ${{ matrix.name }}
+
+      - run: bun install --frozen-lockfile
+
+      # Builds each .node addon for the host, then embeds them via `bun build --compile`.
+      # No cross-compilation: the runner architecture is the release target.
+      - run: bun run bundle
+
+      - run: mv dist/log-forensics-mcp${{ matrix.ext }} dist/log-forensics-mcp-${{ matrix.name }}${{ matrix.ext }}
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: log-forensics-mcp-${{ matrix.name }}
+          path: dist/log-forensics-mcp-${{ matrix.name }}${{ matrix.ext }}
+          if-no-files-found: error
+
+  release:
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*
+          generate_release_notes: true
