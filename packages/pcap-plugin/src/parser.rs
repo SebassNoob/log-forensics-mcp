@@ -1,5 +1,6 @@
+use etherparse::{LinkSlice, NetSlice, SlicedPacket, TransportSlice};
 use pcap_parser::traits::{PcapNGPacketBlock, PcapReaderIterator};
-use pcap_parser::PcapHeader;
+use pcap_parser::Linktype;
 use pcap_parser::{Block, PcapBlockOwned, PcapError};
 use utils::unix_epoch_to_iso8601;
 
@@ -29,7 +30,103 @@ pub struct Packet {
     pub timestamp: String,
     pub caplen: u32,
     pub origlen: u32,
-    pub data: Vec<u8>,
+    pub data: Frame,
+}
+
+pub struct Frame {
+    pub source: String,
+    pub destination: String,
+    pub protocol: String,
+    pub payload: Vec<u8>,
+}
+
+fn decode(data: &[u8], linktype: Linktype) -> Frame {
+    let packet = match linktype {
+        Linktype::ETHERNET => SlicedPacket::from_ethernet(data).ok(),
+        Linktype::LINUX_SLL => SlicedPacket::from_linux_sll(data).ok(),
+        Linktype::RAW | Linktype::IPV4 | Linktype::IPV6 => SlicedPacket::from_ip(data).ok(),
+        _ => None,
+    };
+    let Some(packet) = packet else {
+        return Frame {
+            source: String::new(),
+            destination: String::new(),
+            protocol: linktype.to_string(),
+            payload: data.to_vec(),
+        };
+    };
+
+    let mac = |bytes: [u8; 6]| {
+        bytes
+            .iter()
+            .map(|byte| format!("{byte:02x}"))
+            .collect::<Vec<_>>()
+            .join(":")
+    };
+    let (source, destination) = match (&packet.net, &packet.link) {
+        (Some(NetSlice::Ipv4(ip)), _) => (
+            ip.header().source_addr().to_string(),
+            ip.header().destination_addr().to_string(),
+        ),
+        // Bracketed so the ":port" appended below cannot be read as another address group.
+        (Some(NetSlice::Ipv6(ip)), _) => (
+            format!("[{}]", ip.header().source_addr()),
+            format!("[{}]", ip.header().destination_addr()),
+        ),
+        (_, Some(LinkSlice::Ethernet2(ethernet))) => {
+            (mac(ethernet.source()), mac(ethernet.destination()))
+        }
+        _ => (String::new(), String::new()),
+    };
+
+    match &packet.transport {
+        Some(TransportSlice::Tcp(tcp)) => Frame {
+            source: format!("{source}:{}", tcp.source_port()),
+            destination: format!("{destination}:{}", tcp.destination_port()),
+            protocol: "TCP".to_string(),
+            payload: tcp.payload().to_vec(),
+        },
+        Some(TransportSlice::Udp(udp)) => Frame {
+            source: format!("{source}:{}", udp.source_port()),
+            destination: format!("{destination}:{}", udp.destination_port()),
+            protocol: "UDP".to_string(),
+            payload: udp.payload().to_vec(),
+        },
+        Some(TransportSlice::Icmpv4(icmp)) => Frame {
+            source,
+            destination,
+            protocol: "ICMP".to_string(),
+            payload: icmp.payload().to_vec(),
+        },
+        Some(TransportSlice::Icmpv6(icmp)) => Frame {
+            source,
+            destination,
+            protocol: "ICMPv6".to_string(),
+            payload: icmp.payload().to_vec(),
+        },
+        Some(TransportSlice::Igmp(igmp)) => Frame {
+            source,
+            destination,
+            protocol: "IGMP".to_string(),
+            payload: igmp.payload().to_vec(),
+        },
+        None => Frame {
+            source,
+            destination,
+            protocol: match &packet.net {
+                Some(NetSlice::Ipv4(_)) => "IPv4".to_string(),
+                Some(NetSlice::Ipv6(_)) => "IPv6".to_string(),
+                Some(NetSlice::Arp(_)) => "ARP".to_string(),
+                None => linktype.to_string(),
+            },
+            payload: packet
+                .net
+                .as_ref()
+                .and_then(NetSlice::ip_payload_ref)
+                .map_or(data, |ip| ip.payload)
+                .to_vec(),
+        },
+    }
 }
 
 pub fn legacy(reader: &mut dyn PcapReaderIterator) -> Result<Capture, PcapError<&'static [u8]>> {
@@ -41,10 +138,12 @@ pub fn legacy(reader: &mut dyn PcapReaderIterator) -> Result<Capture, PcapError<
                 match block {
                     PcapBlockOwned::LegacyHeader(h) => header = Some(h),
                     PcapBlockOwned::Legacy(p) => {
+                        let header = header.as_ref().ok_or(PcapError::HeaderNotRecognized)?;
                         // Nanosecond captures put nanos in ts_usec.
-                        let scale = match header.as_ref().map(PcapHeader::is_nanosecond_precision) {
-                            Some(true) => 1000,
-                            _ => 1,
+                        let scale = if header.is_nanosecond_precision() {
+                            1000
+                        } else {
+                            1
                         };
                         packets.push(Packet {
                             timestamp: unix_epoch_to_iso8601(
@@ -52,7 +151,7 @@ pub fn legacy(reader: &mut dyn PcapReaderIterator) -> Result<Capture, PcapError<
                             ),
                             caplen: p.caplen,
                             origlen: p.origlen,
-                            data: p.data.to_vec(),
+                            data: decode(p.data, header.network),
                         });
                     }
                     _ => return Err(PcapError::HeaderNotRecognized),
@@ -74,6 +173,7 @@ pub fn legacy(reader: &mut dyn PcapReaderIterator) -> Result<Capture, PcapError<
 
 pub fn ng(reader: &mut dyn PcapReaderIterator) -> Result<Capture, PcapError<&'static [u8]>> {
     let mut capture = None;
+    let mut linktype = Linktype(0);
     let mut resolution = 1_000_000;
     let mut ts_offset = 0;
     loop {
@@ -83,6 +183,7 @@ pub fn ng(reader: &mut dyn PcapReaderIterator) -> Result<Capture, PcapError<&'st
                     // Packet timestamps are raw counts, decoded with the resolution and offset of
                     // the interface they were captured on.
                     PcapBlockOwned::NG(Block::InterfaceDescription(idb)) if capture.is_none() => {
+                        linktype = idb.linktype;
                         resolution = idb.ts_resolution().ok_or(PcapError::HeaderNotRecognized)?;
                         ts_offset = idb.ts_offset();
                         capture = Some(Capture {
@@ -104,7 +205,7 @@ pub fn ng(reader: &mut dyn PcapReaderIterator) -> Result<Capture, PcapError<&'st
                                 ),
                                 caplen: epb.caplen,
                                 origlen: epb.origlen,
-                                data: epb.packet_data().to_vec(),
+                                data: decode(epb.packet_data(), linktype),
                             });
                     }
                     // Simple packets carry no timestamp.
@@ -116,7 +217,7 @@ pub fn ng(reader: &mut dyn PcapReaderIterator) -> Result<Capture, PcapError<&'st
                             timestamp: String::new(),
                             caplen: spb.packet_data().len() as u32,
                             origlen: spb.origlen,
-                            data: spb.packet_data().to_vec(),
+                            data: decode(spb.packet_data(), linktype),
                         }),
                     PcapBlockOwned::NG(_) => (),
                     _ => return Err(PcapError::HeaderNotRecognized),

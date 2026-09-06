@@ -1,12 +1,12 @@
 pub mod parser;
 
+use crate::parser::{get_type, legacy, ng, Capture, Packet, PcapType};
 use grep_matcher::Matcher;
 use grep_regex::RegexMatcherBuilder;
 use napi::{Error, Result};
 use napi_derive::napi;
-use crate::parser::{get_type, legacy, ng, Capture, Packet, PcapType};
-use pcap_parser::traits::PcapReaderIterator;
 use pcap_parser::create_reader;
+use pcap_parser::traits::PcapReaderIterator;
 use serde_json::{json, Value};
 use std::collections::HashMap;
 use std::fs::File;
@@ -100,7 +100,7 @@ impl PcapTools {
 
     fn line(index: usize, packet: &Packet) -> String {
         let mut payload = String::new();
-        for &byte in &packet.data {
+        for &byte in &packet.data.payload {
             match byte {
                 b' '..=b'~' => payload.push(byte as char),
                 _ if !payload.ends_with('.') => payload.push('.'),
@@ -108,8 +108,13 @@ impl PcapTools {
             }
         }
         format!(
-            "{index}\t{}\t{}/{}\t{payload}",
-            packet.timestamp, packet.caplen, packet.origlen
+            "{index}\t{}\t{}\t{} > {}\t{}/{}\t{payload}",
+            packet.timestamp,
+            packet.data.protocol,
+            packet.data.source,
+            packet.data.destination,
+            packet.caplen,
+            packet.origlen
         )
     }
 

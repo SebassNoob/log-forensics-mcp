@@ -9,6 +9,7 @@ edition = "2021"
 crate-type = ["cdylib"]
 
 [dependencies]
+etherparse = "0.21.0"
 grep-matcher = "0.1"
 grep-regex = "0.1"
 napi = { version = "3", features = ["async", "tokio_fs", "tokio_rt", "serde-json"] }
