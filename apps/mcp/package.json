@@ -20,6 +20,7 @@
 		"journal-plugin": "workspace:*",
 		"pcap-plugin": "workspace:*",
 		"plaintext-plugin": "workspace:*",
+		"reg-plugin": "workspace:*",
 		"xmcp": "1.1.3",
 		"zod": "^4.0.0"
 	},

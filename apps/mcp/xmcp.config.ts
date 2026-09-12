@@ -19,6 +19,7 @@ const config: XmcpConfig = {
 				"evtx-plugin": "commonjs evtx-plugin",
 				"journal-plugin": "commonjs journal-plugin",
 				"pcap-plugin": "commonjs pcap-plugin",
+				"reg-plugin": "commonjs reg-plugin",
 				"plaintext-plugin": "commonjs plaintext-plugin",
 			},
 		],
