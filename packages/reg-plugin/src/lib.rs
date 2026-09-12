@@ -1,11 +1,15 @@
 mod constants;
 mod parser;
 
-use napi::Result;
+use grep_matcher::Matcher;
+use grep_regex::RegexMatcherBuilder;
+use napi::{Error, Result};
 use napi_derive::napi;
-use serde_json::Value;
+use parser::{parse, version};
+use serde_json::{json, Value};
 use std::collections::HashMap;
 use std::path::Path;
+use utils::{blocking, iso8601};
 
 #[napi]
 #[derive(Default)]
@@ -55,7 +59,22 @@ impl RegPlugin {
 impl RegTools {
     #[napi]
     pub async fn search(&self, file_path: String, search_term: String) -> Result<Vec<String>> {
-        todo!()
+        if search_term.trim().is_empty() {
+            return Err(Error::from_reason("search_term must not be empty"));
+        }
+
+        blocking(move || {
+            let matcher = RegexMatcherBuilder::new()
+                .fixed_strings(true)
+                .case_smart(true)
+                .build(&search_term)
+                .map_err(|e| Error::from_reason(format!("Invalid search_term: {e}")))?;
+
+            Ok(lines(&file_path)?
+                .filter(|line| matcher.is_match(line.as_bytes()).unwrap_or(false))
+                .collect())
+        })
+        .await
     }
 
     #[napi]
@@ -65,11 +84,80 @@ impl RegTools {
         offset: i64,
         max_bytes: i64,
     ) -> Result<Vec<String>> {
-        todo!()
+        if offset < 0 || max_bytes <= 0 {
+            return Err(Error::from_reason("need offset >= 0 and max_bytes > 0"));
+        }
+        let (offset, max_bytes) = (offset as u64, max_bytes as usize);
+
+        blocking(move || {
+            let mut read = Vec::new();
+            let mut end = 0u64;
+            let mut taken = 0usize;
+
+            for line in lines(&file_path)? {
+                end += line.len() as u64 + 1; // newline the caller joins on
+                if end <= offset {
+                    continue;
+                }
+                if taken > 0 && taken + line.len() > max_bytes {
+                    break;
+                }
+                taken += line.len();
+                read.push(line);
+            }
+
+            Ok(read)
+        })
+        .await
     }
 
     #[napi]
     pub async fn stat(&self, file_path: String) -> Result<FileStat> {
-        todo!()
+        blocking(move || {
+            let meta = std::fs::metadata(&file_path)
+                .map_err(|e| Error::from_reason(format!("Failed to stat \"{file_path}\": {e}")))?;
+
+            let mut key_count = 0usize;
+            let mut value_count = 0usize;
+            for key in parse(&file_path)? {
+                key_count += 1;
+                value_count += key.values.len();
+            }
+
+            let Value::Object(metadata) = json!({
+                "version": version(&file_path)?,
+                "keyCount": key_count,
+                "valueCount": value_count,
+            }) else {
+                unreachable!()
+            };
+
+            Ok(FileStat {
+                format: "reg".to_string(),
+                size_bytes: meta.len() as i64,
+                modified_at: iso8601(meta.modified()),
+                created_at: iso8601(meta.created()),
+                metadata: metadata.into_iter().collect(),
+            })
+        })
+        .await
     }
+}
+
+/// A `[path]` line per key, then its values as `path<TAB>name<TAB>data`, the path repeated so a
+/// search hit stands alone. `data` keeps the export's own `type:value` notation.
+fn lines(file_path: &str) -> Result<impl Iterator<Item = String>> {
+    Ok(parse(file_path)?.flat_map(|key| {
+        let path = key.path;
+        std::iter::once(format!("[{path}]")).chain(key.values.into_iter().map(move |value| {
+            format!(
+                "{path}\t{}\t{}",
+                value.name.as_deref().unwrap_or("(Default)"),
+                match value.kind.is_empty() {
+                    true => value.data,
+                    false => format!("{}:{}", value.kind, value.data),
+                }
+            )
+        }))
+    }))
 }

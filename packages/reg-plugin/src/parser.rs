@@ -1,12 +1,7 @@
-use crate::constants::{REGISTRY_PATH, REGISTRY_VALUE};
+use crate::constants::{REGISTRY_EDITOR_VERSION, REGISTRY_PATH, REGISTRY_VALUE};
 use napi::{Error, Result};
 use std::fs::File;
 use std::io::{BufRead, BufReader};
-
-pub struct Registry {
-    pub version: String,
-    pub keys: Vec<Key>,
-}
 
 pub struct Key {
     pub path: String,
@@ -132,4 +127,13 @@ fn key_path(line: &str) -> Option<String> {
     REGISTRY_PATH
         .captures(line)
         .map(|caps| caps["path"].to_string())
+}
+
+
+pub fn version(filename: &str) -> Result<Option<String>> {
+    Ok(Lines::open(filename)?.next().and_then(|line| {
+        REGISTRY_EDITOR_VERSION
+            .captures(&line)
+            .map(|caps| caps["version"].to_string())
+    }))
 }
