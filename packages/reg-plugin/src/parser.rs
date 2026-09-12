@@ -129,7 +129,6 @@ fn key_path(line: &str) -> Option<String> {
         .map(|caps| caps["path"].to_string())
 }
 
-
 pub fn version(filename: &str) -> Result<Option<String>> {
     Ok(Lines::open(filename)?.next().and_then(|line| {
         REGISTRY_EDITOR_VERSION

@@ -1,4 +1,4 @@
-use evtx::{EvtxFileHeader, EvtxParser, HeaderFlags, ParserSettings};
+use evtx::{EvtxFileHeader, EvtxParser, HeaderFlags, ParserSettings, SerializedEvtxRecord};
 use grep_matcher::Matcher;
 use grep_regex::RegexMatcherBuilder;
 use napi::{Error, Result};
@@ -64,6 +64,13 @@ impl EvtxPlugin {
 
 #[napi]
 impl EvtxTools {
+    fn line(record: SerializedEvtxRecord<Value>) -> String {
+        format!(
+            "{}\t{}\t{}",
+            record.event_record_id, record.timestamp, record.data
+        )
+    }
+
     fn open(file_path: &str) -> Result<EvtxParser<File>> {
         EvtxParser::from_path(file_path)
             .map(|p| p.with_configuration(ParserSettings::default().indent(false)))
@@ -85,14 +92,9 @@ impl EvtxTools {
             let mut parser = EvtxTools::open(&file_path)?;
 
             Ok(parser
-                .records_json()
+                .records_json_value()
                 .flatten()
-                .map(|record| {
-                    format!(
-                        "{}\t{}\t{}",
-                        record.event_record_id, record.timestamp, record.data
-                    )
-                })
+                .map(EvtxTools::line)
                 .filter(|line| matcher.is_match(line.as_bytes()).unwrap_or(false))
                 .collect())
         })
@@ -116,11 +118,8 @@ impl EvtxTools {
             let mut end = 0u64;
             let mut taken = 0usize;
 
-            for record in EvtxTools::open(&file_path)?.records_json().flatten() {
-                let line = format!(
-                    "{}\t{}\t{}",
-                    record.event_record_id, record.timestamp, record.data
-                );
+            for record in EvtxTools::open(&file_path)?.records_json_value().flatten() {
+                let line = EvtxTools::line(record);
                 end += line.len() as u64 + 1; // newline the caller joins on
                 if end <= offset {
                     continue;

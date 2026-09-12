@@ -12,8 +12,7 @@ export const schema = {
 
 export const metadata: ToolMetadata = {
 	name: "search",
-	description:
-		"Search a log file and return the matching entries. The search term is plaintext: it is matched as a literal substring, not a regular expression, so regex syntax is looked for verbatim and will not match. Searching is case-insensitive unless the term contains an uppercase letter.",
+	description: "Search a log file and return the matching entries.",
 	annotations: {
 		title: "Search",
 		readOnlyHint: true,
