@@ -28,7 +28,7 @@ const config: XmcpConfig = {
 		name: "log-forensics-mcp",
 		description: "MCP server for log forensics. Allows searching and reading supported log files.",
 		instructions:
-			"You should call `list_directory` and `list_supported_formats` to see what you can do. Search for IOCs and construct timelines with the tools `search` and `read`.",
+			"You should call `list_directory` and `list_supported_formats` to see what you can do. Search for IOCs and construct timelines with the tools `search` and `read`. Different log formats call different parsers, use `stat` to see what format a log file is in.",
 	},
 };
 

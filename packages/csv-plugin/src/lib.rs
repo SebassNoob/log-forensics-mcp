@@ -6,7 +6,6 @@ use napi_derive::napi;
 use serde_json::{json, Map, Value};
 use std::collections::HashMap;
 use std::fs::File;
-use std::io::{BufRead, BufReader};
 use std::path::Path;
 use utils::{blocking, iso8601};
 
@@ -141,20 +140,10 @@ impl CsvTools {
 }
 
 fn delimiter(file_path: &str) -> u8 {
-    if Path::new(file_path).extension() != Some("tsv".as_ref()) {
-        return b',';
+    match Path::new(file_path).extension() {
+        Some(extension) if extension == "tsv" => b'\t',
+        _ => b',',
     }
-
-    // Zeek logs declare their own separator as an escape in the first header line, `#separator \x09`.
-    let mut header = String::new();
-    if let Ok(file) = File::open(file_path) {
-        BufReader::new(file).read_line(&mut header).ok();
-    }
-    header
-        .trim_end()
-        .strip_prefix("#separator \\x")
-        .and_then(|hex| u8::from_str_radix(hex, 16).ok())
-        .unwrap_or(b'\t')
 }
 
 fn open(file_path: &str) -> Result<Reader<File>> {

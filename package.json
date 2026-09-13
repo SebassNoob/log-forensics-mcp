@@ -10,6 +10,7 @@
 		"build": "turbo run build",
 		"bundle": "turbo run build && bun build --compile --outfile dist/log-forensics-mcp apps/mcp/dist/http.js",
 		"dev": "turbo run dev",
+		"start": "turbo run start",
 		"check-types": "turbo run check-types",
 		"lint": "turbo run lint",
 		"format": "turbo run format"
