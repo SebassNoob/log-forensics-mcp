@@ -13,7 +13,7 @@ export interface LogForensicsPlugin {
 	identify(filePath: string): OptionalPromise<boolean>;
 	tools: {
 		search?(filePath: string, searchTerm: string): OptionalPromise<string[]>;
-		read?(filePath: string, offset: number, max_bytes: number): OptionalPromise<string[]>;
+		read?(filePath: string, offsetRows: number, maxRows: number): OptionalPromise<string[]>;
 		stat?(filePath: string): OptionalPromise<{
 			format: string;
 			sizeBytes: number;

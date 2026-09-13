@@ -90,33 +90,21 @@ impl JournalTools {
     pub async fn read(
         &self,
         file_path: String,
-        offset: i64,
-        max_bytes: i64,
+        offset_rows: i64,
+        max_rows: i64,
     ) -> Result<Vec<String>> {
-        if offset < 0 || max_bytes <= 0 {
-            return Err(Error::from_reason("need offset >= 0 and max_bytes > 0"));
+        if offset_rows < 0 || max_rows <= 0 {
+            return Err(Error::from_reason("need offset_rows >= 0 and max_rows > 0"));
         }
-        let (offset, max_bytes) = (offset as u64, max_bytes as usize);
+        let (offset_rows, max_rows) = (offset_rows as usize, max_rows as usize);
 
         blocking(move || {
-            let mut lines = Vec::new();
-            let mut end = 0u64;
-            let mut taken = 0usize;
-
-            for entry in open(&file_path)?.entries {
-                let line = line(entry.seqnum, entry.realtime, &entry.fields);
-                end += line.len() as u64 + 1; // newline the caller joins on
-                if end <= offset {
-                    continue;
-                }
-                if taken > 0 && taken + line.len() > max_bytes {
-                    break;
-                }
-                taken += line.len();
-                lines.push(line);
-            }
-
-            Ok(lines)
+            Ok(open(&file_path)?
+                .entries
+                .skip(offset_rows)
+                .take(max_rows)
+                .map(|entry| line(entry.seqnum, entry.realtime, &entry.fields))
+                .collect())
         })
         .await
     }

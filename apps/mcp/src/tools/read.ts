@@ -4,24 +4,24 @@ import { resolvePlugin } from "../load";
 
 export const schema = {
 	filePath: z.string().describe("Path to the log file to read"),
-	offsetBytes: z
+	offsetRows: z
 		.number()
 		.int()
 		.min(0)
 		.default(0)
-		.describe("Approximate byte offset to start reading from"),
-	maxBytes: z
+		.describe("Number of rows to skip before reading"),
+	maxRows: z
 		.number()
 		.int()
 		.positive()
-		.default(65536)
-		.describe("Approximate maximum number of bytes to return"),
+		.default(500)
+		.describe("Maximum number of rows to return"),
 };
 
 export const metadata: ToolMetadata = {
 	name: "read",
 	description:
-		"Read a slice of a log file as text lines, starting at a byte offset. Both offset and maxBytes are estimates over the formatted output rather than exact positions in the file, so a slice may start and end a little outside the range asked for.",
+		"Read a slice of a log file as text lines, starting at a row offset. A row is one record of the underlying format (a csv row, an event, a packet), and the index printed on each line is its absolute position in the file.",
 	annotations: {
 		title: "Read",
 		readOnlyHint: true,
@@ -30,18 +30,18 @@ export const metadata: ToolMetadata = {
 	},
 };
 
-export default async function readTool({ filePath, offsetBytes, maxBytes }: InferSchema<typeof schema>) {
+export default async function readTool({ filePath, offsetRows, maxRows }: InferSchema<typeof schema>) {
 	const plugin = resolvePlugin(filePath);
 
 	if (!plugin.tools.read) {
 		throw new Error(`Plugin "${plugin.name}" does not support read.`);
 	}
 
-	const lines = await plugin.tools.read(filePath, offsetBytes, maxBytes);
+	const lines = await plugin.tools.read(filePath, offsetRows, maxRows);
 
 	const text = lines.length
-		? `${plugin.name}: ${lines.length} line(s) from ${filePath} at offset ${offsetBytes}\n${lines.join("\n")}`
-		: `${plugin.name}: nothing to read in ${filePath} at offset ${offsetBytes}`;
+		? `${plugin.name}: ${lines.length} line(s) from ${filePath} at row ${offsetRows}\n${lines.join("\n")}`
+		: `${plugin.name}: nothing to read in ${filePath} at row ${offsetRows}`;
 
 	return { content: [{ type: "text" as const, text }] };
 }
