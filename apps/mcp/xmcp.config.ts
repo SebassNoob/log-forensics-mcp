@@ -3,7 +3,6 @@ import type { XmcpConfig } from "xmcp";
 
 const config: XmcpConfig = {
 	http: true,
-	stdio: true,
 	paths: {
 		tools: "./src/tools",
 		prompts: "./src/prompts",
@@ -11,6 +10,8 @@ const config: XmcpConfig = {
 	},
 	bundler: (config: RspackOptions): RspackOptions => ({
 		...config,
+		// dont split the output into multiple chunks, because the MCP server is a single entrypoint
+		output: { ...config.output, asyncChunks: false },
 		externals: [
 			...(Array.isArray(config.externals) ? config.externals : []),
 			// The native addon is loaded by napi-rs at runtime; rspack cannot parse .node binaries.
