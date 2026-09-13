@@ -7,7 +7,17 @@ export const schema = {
 	searchTerm: z
 		.string()
 		.min(1)
-		.describe("Plaintext term to look for in the file, matched literally rather than as a regex"),
+		.describe("Term to look for in the file"),
+	offsetRows: z
+		.int()
+		.min(0)
+		.optional()
+		.describe("Number of rows to skip before returning matches"),
+	maxRows: z
+		.int()
+		.positive()
+		.optional()
+		.describe("Maximum number of matching rows to return"),
 };
 
 export const metadata: ToolMetadata = {
@@ -21,7 +31,7 @@ export const metadata: ToolMetadata = {
 	},
 };
 
-export default async function searchTool({ filePath, searchTerm }: InferSchema<typeof schema>) {
+export default async function searchTool({ filePath, searchTerm, offsetRows, maxRows }: InferSchema<typeof schema>) {
 	const plugin = resolvePlugin(filePath);
 
 	if (!plugin.tools.search) {
@@ -30,8 +40,10 @@ export default async function searchTool({ filePath, searchTerm }: InferSchema<t
 
 	const matches = await plugin.tools.search(filePath, searchTerm);
 
-	const text = matches.length
-		? `${plugin.name}: ${matches.length} match(es) in ${filePath}\n${matches.join("\n")}`
+	const filteredMatches = matches.slice(offsetRows ?? 0, maxRows ? (offsetRows ?? 0) + maxRows : undefined);
+
+	const text = filteredMatches.length
+		? `${plugin.name}: ${filteredMatches.length} match(es) in ${filePath}\n${filteredMatches.join("\n")}`
 		: `${plugin.name}: no matches for "${searchTerm}" in ${filePath}`;
 
 	return { content: [{ type: "text" as const, text }] };
