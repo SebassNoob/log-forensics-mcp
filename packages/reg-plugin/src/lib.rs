@@ -89,7 +89,13 @@ impl RegTools {
         }
         let (offset_rows, max_rows) = (offset_rows as usize, max_rows as usize);
 
-        blocking(move || Ok(lines(&file_path)?.skip(offset_rows).take(max_rows).collect())).await
+        blocking(move || {
+            Ok(lines(&file_path)?
+                .skip(offset_rows)
+                .take(max_rows)
+                .collect())
+        })
+        .await
     }
 
     #[napi]
