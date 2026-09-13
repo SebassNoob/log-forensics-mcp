@@ -20,5 +20,5 @@ export default function timelinePrompt({ dirPath }: InferSchema<typeof schema>) 
 4. Merge the entries into one ordered sequence, keeping the source file on every row so each line stays attributable.
 5. Report a table of UTC timestamp, source file, host or user where known, and the event, followed by a narrative of what appears to have happened.
 
-Call out clock skew between sources, periods where a log is silent, and rotation or truncation that removed data: an absence in the timeline is a finding, not a gap to smooth over.`;
+Call out clock skew between sources, periods where a log is silent, and any other anomalies that might affect the timeline's accuracy.`;
 }
