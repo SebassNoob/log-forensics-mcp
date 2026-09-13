@@ -40,13 +40,13 @@ impl CsvPlugin {
 
     #[napi(getter)]
     pub fn description(&self) -> String {
-        "File system access to delimited text files (csv, tsv).".to_string()
+        "File system access to comma delimited text files (csv).".to_string()
     }
 
     #[napi]
     pub fn identify(&self, file_path: String) -> bool {
         let extension = Path::new(&file_path).extension();
-        extension == Some("csv".as_ref()) || extension == Some("tsv".as_ref())
+        extension == Some("csv".as_ref())
     }
 
     #[napi(getter)]
