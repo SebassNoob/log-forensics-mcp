@@ -1,5 +1,8 @@
-import { existsSync, mkdirSync, renameSync, writeFileSync } from "node:fs";
+import { stat, mkdir, writeFile } from "node:fs";
 import { dirname, join } from "node:path";
+import { promisify } from "node:util";
+
+const [statAsync, mkdirAsync, writeFileAsync] = [stat, mkdir, writeFile].map((fn) => promisify(fn));
 
 type StixObject = {
 	type: string;
@@ -15,19 +18,22 @@ type StixObject = {
 	external_references?: { source_name: string; external_id?: string; url?: string }[];
 };
 
-const output = join(__dirname, "../generated/attack-enterprise.json");
+async function fetchAttackData(stixUrl: string): Promise<StixObject[]> {
+	const response = await fetch(stixUrl);
 
-async function main() {
-	const response = await fetch(
-		"https://raw.githubusercontent.com/mitre-attack/attack-stix-data/master/enterprise-attack/enterprise-attack.json",
-	);
+	const body = await response.json();
 
 	if (!response.ok) {
-		throw new Error(`${response.status} ${response.statusText}`);
+		throw new Error(`${response.status} ${body}`);
 	}
 
-	const resp = await response.json();
-	const attackPattern: StixObject[] = resp.objects.filter(
+	return body.objects;
+}
+
+async function parseAttackTechniques(
+	data: StixObject[],
+): Promise<{ id: string; name: string; description: string }[]> {
+	const attackPattern: StixObject[] = data.filter(
 		(obj: Record<string, unknown>) => "type" in obj && obj.type === "attack-pattern",
 	);
 
@@ -41,15 +47,51 @@ async function main() {
 		})
 		.filter((t): t is { id: string; name: string; description: string } => t !== null);
 
-	if (!existsSync(dirname(output))) {
-		mkdirSync(dirname(output), { recursive: true });
-	}
-
-	const tmp = `${output}.tmp`;
-	writeFileSync(tmp, JSON.stringify(techniques, null, 2));
-	renameSync(tmp, output);
+	return techniques;
 }
 
-main().catch((error) => {
-	console.warn(`Skipping the ATT&CK resource, could not generate its data: ${error.message}`);
-});
+async function parseAttackTactics(
+	data: StixObject[],
+): Promise<{ id: string; name: string; shortname: string; description: string }[]> {
+	const tacticObjects: StixObject[] = data.filter(
+		(obj: Record<string, unknown>) => "type" in obj && obj.type === "x-mitre-tactic",
+	);
+
+	const tactics = tacticObjects
+		.filter((obj) => !obj.revoked && !obj.x_mitre_deprecated)
+		.map((obj) => {
+			const id = obj.external_references?.find(
+				(r) => r.source_name === "mitre-attack",
+			)?.external_id;
+			return id
+				? {
+						id,
+						name: obj.name,
+						shortname: obj.x_mitre_shortname ?? "",
+						description: obj.description ?? "",
+					}
+				: null;
+		})
+		.filter(
+			(t): t is { id: string; name: string; shortname: string; description: string } => t !== null,
+		);
+
+	return tactics;
+}
+
+export async function generateAttackData(outputDir: string) {
+	const stixUrl =
+		"https://raw.githubusercontent.com/mitre-attack/attack-stix-data/master/enterprise-attack/enterprise-attack.json";
+
+	const data = await fetchAttackData(stixUrl);
+
+	const [techniques, tactics] = await Promise.all([
+		parseAttackTechniques(data),
+		parseAttackTactics(data),
+	]);
+
+	await Promise.all([
+		writeFileAsync(join(outputDir, "attack-techniques.json"), JSON.stringify(techniques)),
+		writeFileAsync(join(outputDir, "attack-tactics.json"), JSON.stringify(tactics)),
+	]);
+}

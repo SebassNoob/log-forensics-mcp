@@ -13,8 +13,7 @@
 		"start": "turbo run start",
 		"check-types": "turbo run check-types",
 		"lint": "turbo run lint",
-		"format": "turbo run format",
-		"version": "changeset version"
+		"format": "turbo run format"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^2.5.13",
