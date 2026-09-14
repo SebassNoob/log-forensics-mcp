@@ -1,0 +1,5 @@
+{
+	"baseBranch": "master",
+	"fixed": [["*"]],
+	"privatePackages": { "version": true, "tag": false }
+}
