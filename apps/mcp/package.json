@@ -7,12 +7,13 @@
 		"node": ">=22.0.0"
 	},
 	"scripts": {
+		"prebuild": "bun run scripts/generate-attack-data.ts",
 		"build": "XMCP_TELEMETRY_DISABLED=true xmcp build",
 		"dev": "XMCP_TELEMETRY_DISABLED=true xmcp dev",
 		"start": "bun run dist/http.js",
 		"check-types": "tsgo --noEmit",
-		"lint": "biome check .",
-		"format": "biome check --write ."
+		"lint": "biome check --write .",
+		"format": "biome format --write ."
 	},
 	"dependencies": {
 		"csv-plugin": "workspace:*",
