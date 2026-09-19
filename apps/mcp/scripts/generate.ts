@@ -1,8 +1,8 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import { join } from "node:path";
+import { z } from "zod";
 import { generateAttackTactics, generateAttackTechniques } from "./generate-attack-data";
 import { generateEventIds } from "./generate-event-ids";
-import { z } from "zod";
 
 const outputDir = join(__dirname, "../generated");
 const outputModel = z.array(z.record(z.string(), z.unknown()));

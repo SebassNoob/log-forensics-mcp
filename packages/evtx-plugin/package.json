@@ -13,6 +13,9 @@
 	"napi": {
 		"binaryName": "evtx-plugin"
 	},
+	"dependencies": {
+		"utils": "workspace:*"
+	},
 	"devDependencies": {
 		"@napi-rs/cli": "^3"
 	}

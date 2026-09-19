@@ -13,6 +13,9 @@
 	"napi": {
 		"binaryName": "plaintext-plugin"
 	},
+	"dependencies": {
+		"utils": "workspace:*"
+	},
 	"devDependencies": {
 		"@napi-rs/cli": "^3.9.0"
 	}
