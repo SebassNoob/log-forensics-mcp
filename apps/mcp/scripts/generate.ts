@@ -3,6 +3,8 @@ import { join } from "node:path";
 import { z } from "zod";
 import { generateAttackTactics, generateAttackTechniques } from "./generate-attack-data";
 import { generateEventIds } from "./generate-event-ids";
+import { generatePorts } from "./generate-ports";
+import { generateSysmonEventIds } from "./generate-sysmon-event-ids";
 
 const outputDir = join(__dirname, "../generated");
 const outputModel = z.array(z.record(z.string(), z.unknown()));
@@ -30,6 +32,22 @@ const datasets = {
 			name: "Windows event IDs to monitor",
 			description:
 				"Windows Server event IDs recommended for security monitoring. Each entry has its current and legacy event ID, criticality and a summary of what the event means.",
+		},
+	},
+	"sysmon-event-ids": {
+		generate: generateSysmonEventIds,
+		metadata: {
+			name: "Sysmon event IDs",
+			description:
+				"Event IDs written by Sysmon, the Sysinternals system monitor. Each entry has its event ID, name and a summary of what the event records.",
+		},
+	},
+	ports: {
+		generate: generatePorts,
+		metadata: {
+			name: "IANA service names and port numbers",
+			description:
+				"The IANA registry of assigned TCP and UDP ports. Each entry has its port number or range, transport protocol, service name and description.",
 		},
 	},
 };

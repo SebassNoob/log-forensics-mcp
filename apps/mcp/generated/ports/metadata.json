@@ -1,0 +1,4 @@
+{
+	"name": "IANA service names and port numbers",
+	"description": "The IANA registry of assigned TCP and UDP ports. Each entry has its port number or range, transport protocol, service name and description."
+}
