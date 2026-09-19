@@ -1,8 +1,8 @@
-import { stat, mkdir, writeFile } from "node:fs";
-import { dirname, join } from "node:path";
+import { writeFile } from "node:fs";
+import { join } from "node:path";
 import { promisify } from "node:util";
 
-const [statAsync, mkdirAsync, writeFileAsync] = [stat, mkdir, writeFile].map((fn) => promisify(fn));
+const writeFileAsync = promisify(writeFile);
 
 type StixObject = {
 	type: string;
@@ -91,7 +91,10 @@ export async function generateAttackData(outputDir: string) {
 	]);
 
 	await Promise.all([
-		writeFileAsync(join(outputDir, "attack-techniques.json"), JSON.stringify(techniques)),
-		writeFileAsync(join(outputDir, "attack-tactics.json"), JSON.stringify(tactics)),
+		writeFileAsync(
+			join(outputDir, "attack-techniques.json"),
+			JSON.stringify(techniques, null, "\t"),
+		),
+		writeFileAsync(join(outputDir, "attack-tactics.json"), JSON.stringify(tactics, null, "\t")),
 	]);
 }

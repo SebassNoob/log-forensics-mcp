@@ -8,7 +8,11 @@
 		"strict": true,
 		"skipLibCheck": true,
 		"resolveJsonModule": true,
-		"noEmit": true
+		"noEmit": true,
+		"paths": {
+			"@": ["./src"],
+			"@/*": ["./src/*"]
+		}
 	},
 	"include": ["xmcp-env.d.ts", "xmcp.config.ts", "src/**/*.ts", "scripts/**/*.ts"]
 }

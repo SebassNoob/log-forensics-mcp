@@ -56,5 +56,5 @@ export async function generateEventIds(outputDir: string) {
 	const events = parseEventIdTable(html);
 
 	await mkdir(outputDir, { recursive: true });
-	await writeFile(join(outputDir, "windows-event-ids.json"), JSON.stringify(events));
+	await writeFile(join(outputDir, "windows-event-ids.json"), JSON.stringify(events, null, "\t"));
 }

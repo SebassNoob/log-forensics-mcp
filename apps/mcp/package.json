@@ -8,6 +8,7 @@
 	},
 	"scripts": {
 		"build": "XMCP_TELEMETRY_DISABLED=true xmcp build",
+		"generate": "bun scripts/generate.ts",
 		"dev": "XMCP_TELEMETRY_DISABLED=true xmcp dev",
 		"start": "bun run dist/http.js",
 		"check-types": "tsgo --noEmit",
@@ -18,6 +19,7 @@
 		"csv-plugin": "workspace:*",
 		"evtx-plugin": "workspace:*",
 		"journal-plugin": "workspace:*",
+		"minisearch": "^7.2.0",
 		"pcap-plugin": "workspace:*",
 		"plaintext-plugin": "workspace:*",
 		"reg-plugin": "workspace:*",

@@ -1,0 +1,2288 @@
+[
+	{
+		"currentEventId": "4618",
+		"legacyEventId": null,
+		"criticality": "High",
+		"summary": "A monitored security event pattern has occurred."
+	},
+	{
+		"currentEventId": "4649",
+		"legacyEventId": null,
+		"criticality": "High",
+		"summary": "A replay attack was detected. May be a harmless false positive due to misconfiguration error."
+	},
+	{
+		"currentEventId": "4719",
+		"legacyEventId": "612",
+		"criticality": "High",
+		"summary": "System audit policy was changed."
+	},
+	{
+		"currentEventId": "4765",
+		"legacyEventId": null,
+		"criticality": "High",
+		"summary": "SID History was added to an account."
+	},
+	{
+		"currentEventId": "4766",
+		"legacyEventId": null,
+		"criticality": "High",
+		"summary": "An attempt to add SID History to an account failed."
+	},
+	{
+		"currentEventId": "4794",
+		"legacyEventId": null,
+		"criticality": "High",
+		"summary": "An attempt was made to set the Directory Services Restore Mode."
+	},
+	{
+		"currentEventId": "4897",
+		"legacyEventId": "801",
+		"criticality": "High",
+		"summary": "Role separation enabled."
+	},
+	{
+		"currentEventId": "4964",
+		"legacyEventId": null,
+		"criticality": "High",
+		"summary": "Special groups have been assigned to a new logon."
+	},
+	{
+		"currentEventId": "5124",
+		"legacyEventId": null,
+		"criticality": "High",
+		"summary": "A security setting was updated on the OCSP Responder Service."
+	},
+	{
+		"currentEventId": null,
+		"legacyEventId": "550",
+		"criticality": "Medium to High",
+		"summary": "Possible denial-of-service (DoS) attack."
+	},
+	{
+		"currentEventId": "1102",
+		"legacyEventId": "517",
+		"criticality": "Medium to High",
+		"summary": "The audit log was cleared."
+	},
+	{
+		"currentEventId": "4621",
+		"legacyEventId": null,
+		"criticality": "Medium",
+		"summary": "Administrator recovered system from CrashOnAuditFail. Users who are not administrators will now be allowed to log on. Some auditable activity might not have been recorded."
+	},
+	{
+		"currentEventId": "4675",
+		"legacyEventId": null,
+		"criticality": "Medium",
+		"summary": "SIDs were filtered."
+	},
+	{
+		"currentEventId": "4692",
+		"legacyEventId": null,
+		"criticality": "Medium",
+		"summary": "Backup of data protection master key was attempted."
+	},
+	{
+		"currentEventId": "4693",
+		"legacyEventId": null,
+		"criticality": "Medium",
+		"summary": "Recovery of data protection master key was attempted."
+	},
+	{
+		"currentEventId": "4706",
+		"legacyEventId": "610",
+		"criticality": "Medium",
+		"summary": "A new trust was created to a domain."
+	},
+	{
+		"currentEventId": "4713",
+		"legacyEventId": "617",
+		"criticality": "Medium",
+		"summary": "Kerberos policy was changed."
+	},
+	{
+		"currentEventId": "4714",
+		"legacyEventId": "618",
+		"criticality": "Medium",
+		"summary": "Encrypted data recovery policy was changed."
+	},
+	{
+		"currentEventId": "4715",
+		"legacyEventId": null,
+		"criticality": "Medium",
+		"summary": "The audit policy (SACL) on an object was changed."
+	},
+	{
+		"currentEventId": "4716",
+		"legacyEventId": "620",
+		"criticality": "Medium",
+		"summary": "Trusted domain information was modified."
+	},
+	{
+		"currentEventId": "4724",
+		"legacyEventId": "628",
+		"criticality": "Medium",
+		"summary": "An attempt was made to reset an account's password."
+	},
+	{
+		"currentEventId": "4727",
+		"legacyEventId": "631",
+		"criticality": "Medium",
+		"summary": "A security-enabled global group was created."
+	},
+	{
+		"currentEventId": "4735",
+		"legacyEventId": "639",
+		"criticality": "Medium",
+		"summary": "A security-enabled local group was changed."
+	},
+	{
+		"currentEventId": "4737",
+		"legacyEventId": "641",
+		"criticality": "Medium",
+		"summary": "A security-enabled global group was changed."
+	},
+	{
+		"currentEventId": "4739",
+		"legacyEventId": "643",
+		"criticality": "Medium",
+		"summary": "Domain Policy was changed."
+	},
+	{
+		"currentEventId": "4754",
+		"legacyEventId": "658",
+		"criticality": "Medium",
+		"summary": "A security-enabled universal group was created."
+	},
+	{
+		"currentEventId": "4755",
+		"legacyEventId": "659",
+		"criticality": "Medium",
+		"summary": "A security-enabled universal group was changed."
+	},
+	{
+		"currentEventId": "4764",
+		"legacyEventId": "667",
+		"criticality": "Medium",
+		"summary": "A security-disabled group was deleted."
+	},
+	{
+		"currentEventId": "4764",
+		"legacyEventId": "668",
+		"criticality": "Medium",
+		"summary": "A group's type was changed."
+	},
+	{
+		"currentEventId": "4780",
+		"legacyEventId": "684",
+		"criticality": "Medium",
+		"summary": "The ACL was set on accounts which are members of administrators groups."
+	},
+	{
+		"currentEventId": "4816",
+		"legacyEventId": null,
+		"criticality": "Medium",
+		"summary": "RPC detected an integrity violation while decrypting an incoming message."
+	},
+	{
+		"currentEventId": "4865",
+		"legacyEventId": null,
+		"criticality": "Medium",
+		"summary": "A trusted forest information entry was added."
+	},
+	{
+		"currentEventId": "4866",
+		"legacyEventId": null,
+		"criticality": "Medium",
+		"summary": "A trusted forest information entry was removed."
+	},
+	{
+		"currentEventId": "4867",
+		"legacyEventId": null,
+		"criticality": "Medium",
+		"summary": "A trusted forest information entry was modified."
+	},
+	{
+		"currentEventId": "4868",
+		"legacyEventId": "772",
+		"criticality": "Medium",
+		"summary": "The certificate manager denied a pending certificate request."
+	},
+	{
+		"currentEventId": "4870",
+		"legacyEventId": "774",
+		"criticality": "Medium",
+		"summary": "Certificate Services revoked a certificate."
+	},
+	{
+		"currentEventId": "4882",
+		"legacyEventId": "786",
+		"criticality": "Medium",
+		"summary": "The security permissions for Certificate Services changed."
+	},
+	{
+		"currentEventId": "4885",
+		"legacyEventId": "789",
+		"criticality": "Medium",
+		"summary": "The audit filter for Certificate Services changed."
+	},
+	{
+		"currentEventId": "4890",
+		"legacyEventId": "794",
+		"criticality": "Medium",
+		"summary": "The certificate manager settings for Certificate Services changed."
+	},
+	{
+		"currentEventId": "4892",
+		"legacyEventId": "796",
+		"criticality": "Medium",
+		"summary": "A property of Certificate Services changed."
+	},
+	{
+		"currentEventId": "4896",
+		"legacyEventId": "800",
+		"criticality": "Medium",
+		"summary": "One or more rows have been deleted from the certificate database."
+	},
+	{
+		"currentEventId": "4906",
+		"legacyEventId": null,
+		"criticality": "Medium",
+		"summary": "The CrashOnAuditFail value has changed."
+	},
+	{
+		"currentEventId": "4907",
+		"legacyEventId": null,
+		"criticality": "Medium",
+		"summary": "Auditing settings on object were changed."
+	},
+	{
+		"currentEventId": "4908",
+		"legacyEventId": null,
+		"criticality": "Medium",
+		"summary": "Special Groups Logon table modified."
+	},
+	{
+		"currentEventId": "4912",
+		"legacyEventId": "807",
+		"criticality": "Medium",
+		"summary": "Per User Audit Policy was changed."
+	},
+	{
+		"currentEventId": "4960",
+		"legacyEventId": null,
+		"criticality": "Medium",
+		"summary": "IPsec dropped an inbound packet that failed an integrity check. If this problem persists, it could indicate a network issue or that packets are being modified in transit to this computer. Verify that the packets sent from the remote computer are the same as those received by this computer. This error might also indicate interoperability problems with other IPsec implementations."
+	},
+	{
+		"currentEventId": "4961",
+		"legacyEventId": null,
+		"criticality": "Medium",
+		"summary": "IPsec dropped an inbound packet that failed a replay check. If this problem persists, it could indicate a replay attack against this computer."
+	},
+	{
+		"currentEventId": "4962",
+		"legacyEventId": null,
+		"criticality": "Medium",
+		"summary": "IPsec dropped an inbound packet that failed a replay check. The inbound packet had too low a sequence number to ensure it was not a replay."
+	},
+	{
+		"currentEventId": "4963",
+		"legacyEventId": null,
+		"criticality": "Medium",
+		"summary": "IPsec dropped an inbound clear text packet that should have been secured. This is usually due to the remote computer changing its IPsec policy without informing this computer. This could also be a spoofing attack attempt."
+	},
+	{
+		"currentEventId": "4965",
+		"legacyEventId": null,
+		"criticality": "Medium",
+		"summary": "IPsec received a packet from a remote computer with an incorrect Security Parameter Index (SPI). This is usually caused by malfunctioning hardware that is corrupting packets. If these errors persist, verify that the packets sent from the remote computer are the same as those received by this computer. This error may also indicate interoperability problems with other IPsec implementations. In that case, if connectivity is not impeded, then these events can be ignored."
+	},
+	{
+		"currentEventId": "4976",
+		"legacyEventId": null,
+		"criticality": "Medium",
+		"summary": "During Main Mode negotiation, IPsec received an invalid negotiation packet. If this problem persists, it could indicate a network issue or an attempt to modify or replay this negotiation."
+	},
+	{
+		"currentEventId": "4977",
+		"legacyEventId": null,
+		"criticality": "Medium",
+		"summary": "During Quick Mode negotiation, IPsec received an invalid negotiation packet. If this problem persists, it could indicate a network issue or an attempt to modify or replay this negotiation."
+	},
+	{
+		"currentEventId": "4978",
+		"legacyEventId": null,
+		"criticality": "Medium",
+		"summary": "During Extended Mode negotiation, IPsec received an invalid negotiation packet. If this problem persists, it could indicate a network issue or an attempt to modify or replay this negotiation."
+	},
+	{
+		"currentEventId": "4983",
+		"legacyEventId": null,
+		"criticality": "Medium",
+		"summary": "An IPsec Extended Mode negotiation failed. The corresponding Main Mode security association has been deleted."
+	},
+	{
+		"currentEventId": "4984",
+		"legacyEventId": null,
+		"criticality": "Medium",
+		"summary": "An IPsec Extended Mode negotiation failed. The corresponding Main Mode security association has been deleted."
+	},
+	{
+		"currentEventId": "5027",
+		"legacyEventId": null,
+		"criticality": "Medium",
+		"summary": "The Windows Firewall Service was unable to retrieve the security policy from the local storage. The service will continue enforcing the current policy."
+	},
+	{
+		"currentEventId": "5028",
+		"legacyEventId": null,
+		"criticality": "Medium",
+		"summary": "The Windows Firewall Service was unable to parse the new security policy. The service will continue with currently enforced policy."
+	},
+	{
+		"currentEventId": "5029",
+		"legacyEventId": null,
+		"criticality": "Medium",
+		"summary": "The Windows Firewall Service failed to initialize the driver. The service will continue to enforce the current policy."
+	},
+	{
+		"currentEventId": "5030",
+		"legacyEventId": null,
+		"criticality": "Medium",
+		"summary": "The Windows Firewall Service failed to start."
+	},
+	{
+		"currentEventId": "5035",
+		"legacyEventId": null,
+		"criticality": "Medium",
+		"summary": "The Windows Firewall Driver failed to start."
+	},
+	{
+		"currentEventId": "5037",
+		"legacyEventId": null,
+		"criticality": "Medium",
+		"summary": "The Windows Firewall Driver detected critical runtime error. Terminating."
+	},
+	{
+		"currentEventId": "5038",
+		"legacyEventId": null,
+		"criticality": "Medium",
+		"summary": "Code integrity determined that the image hash of a file is not valid. The file could be corrupt due to unauthorized modification or the invalid hash could indicate a potential disk device error."
+	},
+	{
+		"currentEventId": "5120",
+		"legacyEventId": null,
+		"criticality": "Medium",
+		"summary": "OCSP Responder Service Started."
+	},
+	{
+		"currentEventId": "5121",
+		"legacyEventId": null,
+		"criticality": "Medium",
+		"summary": "OCSP Responder Service Stopped."
+	},
+	{
+		"currentEventId": "5122",
+		"legacyEventId": null,
+		"criticality": "Medium",
+		"summary": "A configuration entry changed in OCSP Responder Service."
+	},
+	{
+		"currentEventId": "5123",
+		"legacyEventId": null,
+		"criticality": "Medium",
+		"summary": "A configuration entry changed in OCSP Responder Service."
+	},
+	{
+		"currentEventId": "5376",
+		"legacyEventId": null,
+		"criticality": "Medium",
+		"summary": "Credential Manager credentials were backed up."
+	},
+	{
+		"currentEventId": "5377",
+		"legacyEventId": null,
+		"criticality": "Medium",
+		"summary": "Credential Manager credentials were restored from a backup."
+	},
+	{
+		"currentEventId": "5453",
+		"legacyEventId": null,
+		"criticality": "Medium",
+		"summary": "An IPsec negotiation with a remote computer failed because the IKE and AuthIP IPsec Keying Modules (IKEEXT) service is not started."
+	},
+	{
+		"currentEventId": "5480",
+		"legacyEventId": null,
+		"criticality": "Medium",
+		"summary": "IPsec Services failed to get the complete list of network interfaces on the computer. This poses a potential security risk because some of the network interfaces may not get the protection provided by the applied IPsec filters. Use the IP Security Monitor snap-in to diagnose the problem."
+	},
+	{
+		"currentEventId": "5483",
+		"legacyEventId": null,
+		"criticality": "Medium",
+		"summary": "IPsec Services failed to initialize RPC server. IPsec Services could not be started."
+	},
+	{
+		"currentEventId": "5484",
+		"legacyEventId": null,
+		"criticality": "Medium",
+		"summary": "IPsec Services has experienced a critical failure and has been shut down. The shutdown of IPsec Services can put the computer at greater risk of network attack or expose the computer to potential security risks."
+	},
+	{
+		"currentEventId": "5485",
+		"legacyEventId": null,
+		"criticality": "Medium",
+		"summary": "IPsec Services failed to process some IPsec filters on a plug-and-play event for network interfaces. This poses a potential security risk because some of the network interfaces may not get the protection provided by the applied IPsec filters. Use the IP Security Monitor snap-in to diagnose the problem."
+	},
+	{
+		"currentEventId": "5827",
+		"legacyEventId": null,
+		"criticality": "Medium",
+		"summary": "The Netlogon service denied a vulnerable Netlogon secure channel connection from a machine account."
+	},
+	{
+		"currentEventId": "5828",
+		"legacyEventId": null,
+		"criticality": "Medium",
+		"summary": "The Netlogon service denied a vulnerable Netlogon secure channel connection using a trust account."
+	},
+	{
+		"currentEventId": "6145",
+		"legacyEventId": null,
+		"criticality": "Medium",
+		"summary": "One or more errors occurred while processing security policy in the Group Policy objects."
+	},
+	{
+		"currentEventId": "6273",
+		"legacyEventId": null,
+		"criticality": "Medium",
+		"summary": "Network Policy Server denied access to a user."
+	},
+	{
+		"currentEventId": "6274",
+		"legacyEventId": null,
+		"criticality": "Medium",
+		"summary": "Network Policy Server discarded the request for a user."
+	},
+	{
+		"currentEventId": "6275",
+		"legacyEventId": null,
+		"criticality": "Medium",
+		"summary": "Network Policy Server discarded the accounting request for a user."
+	},
+	{
+		"currentEventId": "6276",
+		"legacyEventId": null,
+		"criticality": "Medium",
+		"summary": "Network Policy Server quarantined a user."
+	},
+	{
+		"currentEventId": "6277",
+		"legacyEventId": null,
+		"criticality": "Medium",
+		"summary": "Network Policy Server granted access to a user but put it on probation because the host did not meet the defined health policy."
+	},
+	{
+		"currentEventId": "6278",
+		"legacyEventId": null,
+		"criticality": "Medium",
+		"summary": "Network Policy Server granted full access to a user because the host met the defined health policy."
+	},
+	{
+		"currentEventId": "6279",
+		"legacyEventId": null,
+		"criticality": "Medium",
+		"summary": "Network Policy Server locked the user account due to repeated failed authentication attempts."
+	},
+	{
+		"currentEventId": "6280",
+		"legacyEventId": null,
+		"criticality": "Medium",
+		"summary": "Network Policy Server unlocked the user account."
+	},
+	{
+		"currentEventId": null,
+		"legacyEventId": "640",
+		"criticality": "Medium",
+		"summary": "General account database changed."
+	},
+	{
+		"currentEventId": null,
+		"legacyEventId": "619",
+		"criticality": "Medium",
+		"summary": "Quality of Service Policy changed."
+	},
+	{
+		"currentEventId": "24586",
+		"legacyEventId": null,
+		"criticality": "Medium",
+		"summary": "An error was encountered converting volume."
+	},
+	{
+		"currentEventId": "24592",
+		"legacyEventId": null,
+		"criticality": "Medium",
+		"summary": "An attempt to automatically restart conversion on volume %2 failed."
+	},
+	{
+		"currentEventId": "24593",
+		"legacyEventId": null,
+		"criticality": "Medium",
+		"summary": "Metadata write: Volume %2 returning errors while trying to modify metadata. If failures continue, decrypt volume."
+	},
+	{
+		"currentEventId": "24594",
+		"legacyEventId": null,
+		"criticality": "Medium",
+		"summary": "Metadata rebuild: An attempt to write a copy of metadata on volume %2 failed and may appear as disk corruption. If failures continue, decrypt volume."
+	},
+	{
+		"currentEventId": "4608",
+		"legacyEventId": "512",
+		"criticality": "Low",
+		"summary": "Windows is starting up."
+	},
+	{
+		"currentEventId": "4609",
+		"legacyEventId": "513",
+		"criticality": "Low",
+		"summary": "Windows is shutting down."
+	},
+	{
+		"currentEventId": "4610",
+		"legacyEventId": "514",
+		"criticality": "Low",
+		"summary": "An authentication package has been loaded by the Local Security Authority."
+	},
+	{
+		"currentEventId": "4611",
+		"legacyEventId": "515",
+		"criticality": "Low",
+		"summary": "A trusted logon process has been registered with the Local Security Authority."
+	},
+	{
+		"currentEventId": "4612",
+		"legacyEventId": "516",
+		"criticality": "Low",
+		"summary": "Internal resources allocated for the queuing of audit messages have been exhausted, leading to the loss of some audits."
+	},
+	{
+		"currentEventId": "4614",
+		"legacyEventId": "518",
+		"criticality": "Low",
+		"summary": "A notification package has been loaded by the Security Account Manager."
+	},
+	{
+		"currentEventId": "4615",
+		"legacyEventId": "519",
+		"criticality": "Low",
+		"summary": "Invalid use of LPC port."
+	},
+	{
+		"currentEventId": "4616",
+		"legacyEventId": "520",
+		"criticality": "Low",
+		"summary": "The system time was changed."
+	},
+	{
+		"currentEventId": "4622",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "A security package has been loaded by the Local Security Authority."
+	},
+	{
+		"currentEventId": "4624",
+		"legacyEventId": "528,540",
+		"criticality": "Low",
+		"summary": "An account was successfully logged on."
+	},
+	{
+		"currentEventId": "4625",
+		"legacyEventId": "529-537,539",
+		"criticality": "Low",
+		"summary": "An account failed to log on."
+	},
+	{
+		"currentEventId": "4634",
+		"legacyEventId": "538",
+		"criticality": "Low",
+		"summary": "An account was logged off."
+	},
+	{
+		"currentEventId": "4646",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "IKE DoS-prevention mode started."
+	},
+	{
+		"currentEventId": "4647",
+		"legacyEventId": "551",
+		"criticality": "Low",
+		"summary": "User initiated logoff."
+	},
+	{
+		"currentEventId": "4648",
+		"legacyEventId": "552",
+		"criticality": "Low",
+		"summary": "A logon was attempted using explicit credentials."
+	},
+	{
+		"currentEventId": "4650",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "An IPsec Main Mode security association was established. Extended Mode was not enabled. Certificate authentication was not used."
+	},
+	{
+		"currentEventId": "4651",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "An IPsec Main Mode security association was established. Extended Mode was not enabled. A certificate was used for authentication."
+	},
+	{
+		"currentEventId": "4652",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "An IPsec Main Mode negotiation failed."
+	},
+	{
+		"currentEventId": "4653",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "An IPsec Main Mode negotiation failed."
+	},
+	{
+		"currentEventId": "4654",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "An IPsec Quick Mode negotiation failed."
+	},
+	{
+		"currentEventId": "4655",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "An IPsec Main Mode security association ended."
+	},
+	{
+		"currentEventId": "4656",
+		"legacyEventId": "560",
+		"criticality": "Low",
+		"summary": "A handle to an object was requested."
+	},
+	{
+		"currentEventId": "4657",
+		"legacyEventId": "567",
+		"criticality": "Low",
+		"summary": "A registry value was modified."
+	},
+	{
+		"currentEventId": "4658",
+		"legacyEventId": "562",
+		"criticality": "Low",
+		"summary": "The handle to an object was closed."
+	},
+	{
+		"currentEventId": "4659",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "A handle to an object was requested with intent to delete."
+	},
+	{
+		"currentEventId": "4660",
+		"legacyEventId": "564",
+		"criticality": "Low",
+		"summary": "An object was deleted."
+	},
+	{
+		"currentEventId": "4661",
+		"legacyEventId": "565",
+		"criticality": "Low",
+		"summary": "A handle to an object was requested."
+	},
+	{
+		"currentEventId": "4662",
+		"legacyEventId": "566",
+		"criticality": "Low",
+		"summary": "An operation was performed on an object."
+	},
+	{
+		"currentEventId": "4663",
+		"legacyEventId": "567",
+		"criticality": "Low",
+		"summary": "An attempt was made to access an object."
+	},
+	{
+		"currentEventId": "4664",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "An attempt was made to create a hard link."
+	},
+	{
+		"currentEventId": "4665",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "An attempt was made to create an application client context."
+	},
+	{
+		"currentEventId": "4666",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "An application attempted an operation."
+	},
+	{
+		"currentEventId": "4667",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "An application client context was deleted."
+	},
+	{
+		"currentEventId": "4668",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "An application was initialized."
+	},
+	{
+		"currentEventId": "4670",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "Permissions on an object were changed."
+	},
+	{
+		"currentEventId": "4671",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "An application attempted to access a blocked ordinal through the TBS."
+	},
+	{
+		"currentEventId": "4672",
+		"legacyEventId": "576",
+		"criticality": "Low",
+		"summary": "Special privileges assigned to new logon."
+	},
+	{
+		"currentEventId": "4673",
+		"legacyEventId": "577",
+		"criticality": "Low",
+		"summary": "A privileged service was called."
+	},
+	{
+		"currentEventId": "4674",
+		"legacyEventId": "578",
+		"criticality": "Low",
+		"summary": "An operation was attempted on a privileged object."
+	},
+	{
+		"currentEventId": "4688",
+		"legacyEventId": "592",
+		"criticality": "Low",
+		"summary": "A new process has been created."
+	},
+	{
+		"currentEventId": "4689",
+		"legacyEventId": "593",
+		"criticality": "Low",
+		"summary": "A process has exited."
+	},
+	{
+		"currentEventId": "4690",
+		"legacyEventId": "594",
+		"criticality": "Low",
+		"summary": "An attempt was made to duplicate a handle to an object."
+	},
+	{
+		"currentEventId": "4691",
+		"legacyEventId": "595",
+		"criticality": "Low",
+		"summary": "Indirect access to an object was requested."
+	},
+	{
+		"currentEventId": "4694",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "Protection of auditable protected data was attempted."
+	},
+	{
+		"currentEventId": "4695",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "Unprotection of auditable protected data was attempted."
+	},
+	{
+		"currentEventId": "4696",
+		"legacyEventId": "600",
+		"criticality": "Low",
+		"summary": "A primary token was assigned to process."
+	},
+	{
+		"currentEventId": "4697",
+		"legacyEventId": "601",
+		"criticality": "Low",
+		"summary": "Attempt to install a service."
+	},
+	{
+		"currentEventId": "4698",
+		"legacyEventId": "602",
+		"criticality": "Low",
+		"summary": "A scheduled task was created."
+	},
+	{
+		"currentEventId": "4699",
+		"legacyEventId": "602",
+		"criticality": "Low",
+		"summary": "A scheduled task was deleted."
+	},
+	{
+		"currentEventId": "4700",
+		"legacyEventId": "602",
+		"criticality": "Low",
+		"summary": "A scheduled task was enabled."
+	},
+	{
+		"currentEventId": "4701",
+		"legacyEventId": "602",
+		"criticality": "Low",
+		"summary": "A scheduled task was disabled."
+	},
+	{
+		"currentEventId": "4702",
+		"legacyEventId": "602",
+		"criticality": "Low",
+		"summary": "A scheduled task was updated."
+	},
+	{
+		"currentEventId": "4704",
+		"legacyEventId": "608",
+		"criticality": "Low",
+		"summary": "A user right was assigned."
+	},
+	{
+		"currentEventId": "4705",
+		"legacyEventId": "609",
+		"criticality": "Low",
+		"summary": "A user right was removed."
+	},
+	{
+		"currentEventId": "4707",
+		"legacyEventId": "611",
+		"criticality": "Low",
+		"summary": "A trust to a domain was removed."
+	},
+	{
+		"currentEventId": "4709",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "IPsec Services was started."
+	},
+	{
+		"currentEventId": "4710",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "IPsec Services was disabled."
+	},
+	{
+		"currentEventId": "4711",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "May contain any one of the following: PAStore Engine applied locally cached copy of Active Directory storage IPsec policy on the computer. PAStore Engine applied Active Directory storage IPsec policy on the computer. PAStore Engine applied local registry storage IPsec policy on the computer. PAStore Engine failed to apply locally cached copy of Active Directory storage IPsec policy on the computer. PAStore Engine failed to apply Active Directory storage IPsec policy on the computer. PAStore Engine failed to apply local registry storage IPsec policy on the computer. PAStore Engine failed to apply some rules of the active IPsec policy on the computer. PAStore Engine failed to load directory storage IPsec policy on the computer. PAStore Engine loaded directory storage IPsec policy on the computer. PAStore Engine failed to load local storage IPsec policy on the computer. PAStore Engine loaded local storage IPsec policy on the computer.PAStore Engine polled for changes to the active IPsec policy and detected no changes."
+	},
+	{
+		"currentEventId": "4712",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "IPsec Services encountered a potentially serious failure."
+	},
+	{
+		"currentEventId": "4717",
+		"legacyEventId": "621",
+		"criticality": "Low",
+		"summary": "System security access was granted to an account."
+	},
+	{
+		"currentEventId": "4718",
+		"legacyEventId": "622",
+		"criticality": "Low",
+		"summary": "System security access was removed from an account."
+	},
+	{
+		"currentEventId": "4720",
+		"legacyEventId": "624",
+		"criticality": "Low",
+		"summary": "A user account was created."
+	},
+	{
+		"currentEventId": "4722",
+		"legacyEventId": "626",
+		"criticality": "Low",
+		"summary": "A user account was enabled."
+	},
+	{
+		"currentEventId": "4723",
+		"legacyEventId": "627",
+		"criticality": "Low",
+		"summary": "An attempt was made to change an account's password."
+	},
+	{
+		"currentEventId": "4725",
+		"legacyEventId": "629",
+		"criticality": "Low",
+		"summary": "A user account was disabled."
+	},
+	{
+		"currentEventId": "4726",
+		"legacyEventId": "630",
+		"criticality": "Low",
+		"summary": "A user account was deleted."
+	},
+	{
+		"currentEventId": "4728",
+		"legacyEventId": "632",
+		"criticality": "Low",
+		"summary": "A member was added to a security-enabled global group."
+	},
+	{
+		"currentEventId": "4729",
+		"legacyEventId": "633",
+		"criticality": "Low",
+		"summary": "A member was removed from a security-enabled global group."
+	},
+	{
+		"currentEventId": "4730",
+		"legacyEventId": "634",
+		"criticality": "Low",
+		"summary": "A security-enabled global group was deleted."
+	},
+	{
+		"currentEventId": "4731",
+		"legacyEventId": "635",
+		"criticality": "Low",
+		"summary": "A security-enabled local group was created."
+	},
+	{
+		"currentEventId": "4732",
+		"legacyEventId": "636",
+		"criticality": "Low",
+		"summary": "A member was added to a security-enabled local group."
+	},
+	{
+		"currentEventId": "4733",
+		"legacyEventId": "637",
+		"criticality": "Low",
+		"summary": "A member was removed from a security-enabled local group."
+	},
+	{
+		"currentEventId": "4734",
+		"legacyEventId": "638",
+		"criticality": "Low",
+		"summary": "A security-enabled local group was deleted."
+	},
+	{
+		"currentEventId": "4738",
+		"legacyEventId": "642",
+		"criticality": "Low",
+		"summary": "A user account was changed."
+	},
+	{
+		"currentEventId": "4740",
+		"legacyEventId": "644",
+		"criticality": "Low",
+		"summary": "A user account was locked out."
+	},
+	{
+		"currentEventId": "4741",
+		"legacyEventId": "645",
+		"criticality": "Low",
+		"summary": "A computer account was changed."
+	},
+	{
+		"currentEventId": "4742",
+		"legacyEventId": "646",
+		"criticality": "Low",
+		"summary": "A computer account was changed."
+	},
+	{
+		"currentEventId": "4743",
+		"legacyEventId": "647",
+		"criticality": "Low",
+		"summary": "A computer account was deleted."
+	},
+	{
+		"currentEventId": "4744",
+		"legacyEventId": "648",
+		"criticality": "Low",
+		"summary": "A security-disabled local group was created."
+	},
+	{
+		"currentEventId": "4745",
+		"legacyEventId": "649",
+		"criticality": "Low",
+		"summary": "A security-disabled local group was changed."
+	},
+	{
+		"currentEventId": "4746",
+		"legacyEventId": "650",
+		"criticality": "Low",
+		"summary": "A member was added to a security-disabled local group."
+	},
+	{
+		"currentEventId": "4747",
+		"legacyEventId": "651",
+		"criticality": "Low",
+		"summary": "A member was removed from a security-disabled local group."
+	},
+	{
+		"currentEventId": "4748",
+		"legacyEventId": "652",
+		"criticality": "Low",
+		"summary": "A security-disabled local group was deleted."
+	},
+	{
+		"currentEventId": "4749",
+		"legacyEventId": "653",
+		"criticality": "Low",
+		"summary": "A security-disabled global group was created."
+	},
+	{
+		"currentEventId": "4750",
+		"legacyEventId": "654",
+		"criticality": "Low",
+		"summary": "A security-disabled global group was changed."
+	},
+	{
+		"currentEventId": "4751",
+		"legacyEventId": "655",
+		"criticality": "Low",
+		"summary": "A member was added to a security-disabled global group."
+	},
+	{
+		"currentEventId": "4752",
+		"legacyEventId": "656",
+		"criticality": "Low",
+		"summary": "A member was removed from a security-disabled global group."
+	},
+	{
+		"currentEventId": "4753",
+		"legacyEventId": "657",
+		"criticality": "Low",
+		"summary": "A security-disabled global group was deleted."
+	},
+	{
+		"currentEventId": "4756",
+		"legacyEventId": "660",
+		"criticality": "Low",
+		"summary": "A member was added to a security-enabled universal group."
+	},
+	{
+		"currentEventId": "4757",
+		"legacyEventId": "661",
+		"criticality": "Low",
+		"summary": "A member was removed from a security-enabled universal group."
+	},
+	{
+		"currentEventId": "4758",
+		"legacyEventId": "662",
+		"criticality": "Low",
+		"summary": "A security-enabled universal group was deleted."
+	},
+	{
+		"currentEventId": "4759",
+		"legacyEventId": "663",
+		"criticality": "Low",
+		"summary": "A security-disabled universal group was created."
+	},
+	{
+		"currentEventId": "4760",
+		"legacyEventId": "664",
+		"criticality": "Low",
+		"summary": "A security-disabled universal group was changed."
+	},
+	{
+		"currentEventId": "4761",
+		"legacyEventId": "665",
+		"criticality": "Low",
+		"summary": "A member was added to a security-disabled universal group."
+	},
+	{
+		"currentEventId": "4762",
+		"legacyEventId": "666",
+		"criticality": "Low",
+		"summary": "A member was removed from a security-disabled universal group."
+	},
+	{
+		"currentEventId": "4767",
+		"legacyEventId": "671",
+		"criticality": "Low",
+		"summary": "A user account was unlocked."
+	},
+	{
+		"currentEventId": "4768",
+		"legacyEventId": "672,676",
+		"criticality": "Low",
+		"summary": "A Kerberos authentication ticket (TGT) was requested."
+	},
+	{
+		"currentEventId": "4769",
+		"legacyEventId": "673",
+		"criticality": "Low",
+		"summary": "A Kerberos service ticket was requested."
+	},
+	{
+		"currentEventId": "4770",
+		"legacyEventId": "674",
+		"criticality": "Low",
+		"summary": "A Kerberos service ticket was renewed."
+	},
+	{
+		"currentEventId": "4771",
+		"legacyEventId": "675",
+		"criticality": "Low",
+		"summary": "Kerberos pre-authentication failed."
+	},
+	{
+		"currentEventId": "4772",
+		"legacyEventId": "672",
+		"criticality": "Low",
+		"summary": "A Kerberos authentication ticket request failed."
+	},
+	{
+		"currentEventId": "4774",
+		"legacyEventId": "678",
+		"criticality": "Low",
+		"summary": "An account was mapped for logon."
+	},
+	{
+		"currentEventId": "4775",
+		"legacyEventId": "679",
+		"criticality": "Low",
+		"summary": "An account could not be mapped for logon."
+	},
+	{
+		"currentEventId": "4776",
+		"legacyEventId": "680,681",
+		"criticality": "Low",
+		"summary": "The domain controller attempted to validate the credentials for an account."
+	},
+	{
+		"currentEventId": "4777",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "The domain controller failed to validate the credentials for an account."
+	},
+	{
+		"currentEventId": "4778",
+		"legacyEventId": "682",
+		"criticality": "Low",
+		"summary": "A session was reconnected to a Window Station."
+	},
+	{
+		"currentEventId": "4779",
+		"legacyEventId": "683",
+		"criticality": "Low",
+		"summary": "A session was disconnected from a Window Station."
+	},
+	{
+		"currentEventId": "4781",
+		"legacyEventId": "685",
+		"criticality": "Low",
+		"summary": "The name of an account was changed."
+	},
+	{
+		"currentEventId": "4782",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "The password hash an account was accessed."
+	},
+	{
+		"currentEventId": "4783",
+		"legacyEventId": "667",
+		"criticality": "Low",
+		"summary": "A basic application group was created."
+	},
+	{
+		"currentEventId": "4784",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "A basic application group was changed."
+	},
+	{
+		"currentEventId": "4785",
+		"legacyEventId": "689",
+		"criticality": "Low",
+		"summary": "A member was added to a basic application group."
+	},
+	{
+		"currentEventId": "4786",
+		"legacyEventId": "690",
+		"criticality": "Low",
+		"summary": "A member was removed from a basic application group."
+	},
+	{
+		"currentEventId": "4787",
+		"legacyEventId": "691",
+		"criticality": "Low",
+		"summary": "A nonmember was added to a basic application group."
+	},
+	{
+		"currentEventId": "4788",
+		"legacyEventId": "692",
+		"criticality": "Low",
+		"summary": "A nonmember was removed from a basic application group."
+	},
+	{
+		"currentEventId": "4789",
+		"legacyEventId": "693",
+		"criticality": "Low",
+		"summary": "A basic application group was deleted."
+	},
+	{
+		"currentEventId": "4790",
+		"legacyEventId": "694",
+		"criticality": "Low",
+		"summary": "An LDAP query group was created."
+	},
+	{
+		"currentEventId": "4793",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "The Password Policy Checking API was called."
+	},
+	{
+		"currentEventId": "4800",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "The workstation was locked."
+	},
+	{
+		"currentEventId": "4801",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "The workstation was unlocked."
+	},
+	{
+		"currentEventId": "4802",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "The screen saver was invoked."
+	},
+	{
+		"currentEventId": "4803",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "The screen saver was dismissed."
+	},
+	{
+		"currentEventId": "4864",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "A namespace collision was detected."
+	},
+	{
+		"currentEventId": "4869",
+		"legacyEventId": "773",
+		"criticality": "Low",
+		"summary": "Certificate Services received a resubmitted certificate request."
+	},
+	{
+		"currentEventId": "4871",
+		"legacyEventId": "775",
+		"criticality": "Low",
+		"summary": "Certificate Services received a request to publish the certificate revocation list (CRL)."
+	},
+	{
+		"currentEventId": "4872",
+		"legacyEventId": "776",
+		"criticality": "Low",
+		"summary": "Certificate Services published the certificate revocation list (CRL)."
+	},
+	{
+		"currentEventId": "4873",
+		"legacyEventId": "777",
+		"criticality": "Low",
+		"summary": "A certificate request extension changed."
+	},
+	{
+		"currentEventId": "4874",
+		"legacyEventId": "778",
+		"criticality": "Low",
+		"summary": "One or more certificate request attributes changed."
+	},
+	{
+		"currentEventId": "4875",
+		"legacyEventId": "779",
+		"criticality": "Low",
+		"summary": "Certificate Services received a request to shut down."
+	},
+	{
+		"currentEventId": "4876",
+		"legacyEventId": "780",
+		"criticality": "Low",
+		"summary": "Certificate Services backup started."
+	},
+	{
+		"currentEventId": "4877",
+		"legacyEventId": "781",
+		"criticality": "Low",
+		"summary": "Certificate Services backup completed."
+	},
+	{
+		"currentEventId": "4878",
+		"legacyEventId": "782",
+		"criticality": "Low",
+		"summary": "Certificate Services restore started."
+	},
+	{
+		"currentEventId": "4879",
+		"legacyEventId": "783",
+		"criticality": "Low",
+		"summary": "Certificate Services restore completed."
+	},
+	{
+		"currentEventId": "4880",
+		"legacyEventId": "784",
+		"criticality": "Low",
+		"summary": "Certificate Services started."
+	},
+	{
+		"currentEventId": "4881",
+		"legacyEventId": "785",
+		"criticality": "Low",
+		"summary": "Certificate Services stopped."
+	},
+	{
+		"currentEventId": "4883",
+		"legacyEventId": "787",
+		"criticality": "Low",
+		"summary": "Certificate Services retrieved an archived key."
+	},
+	{
+		"currentEventId": "4884",
+		"legacyEventId": "788",
+		"criticality": "Low",
+		"summary": "Certificate Services imported a certificate into its database."
+	},
+	{
+		"currentEventId": "4886",
+		"legacyEventId": "790",
+		"criticality": "Low",
+		"summary": "Certificate Services received a certificate request."
+	},
+	{
+		"currentEventId": "4887",
+		"legacyEventId": "791",
+		"criticality": "Low",
+		"summary": "Certificate Services approved a certificate request and issued a certificate."
+	},
+	{
+		"currentEventId": "4888",
+		"legacyEventId": "792",
+		"criticality": "Low",
+		"summary": "Certificate Services denied a certificate request."
+	},
+	{
+		"currentEventId": "4889",
+		"legacyEventId": "793",
+		"criticality": "Low",
+		"summary": "Certificate Services set the status of a certificate request to pending."
+	},
+	{
+		"currentEventId": "4891",
+		"legacyEventId": "795",
+		"criticality": "Low",
+		"summary": "A configuration entry changed in Certificate Services."
+	},
+	{
+		"currentEventId": "4893",
+		"legacyEventId": "797",
+		"criticality": "Low",
+		"summary": "Certificate Services archived a key."
+	},
+	{
+		"currentEventId": "4894",
+		"legacyEventId": "798",
+		"criticality": "Low",
+		"summary": "Certificate Services imported and archived a key."
+	},
+	{
+		"currentEventId": "4895",
+		"legacyEventId": "799",
+		"criticality": "Low",
+		"summary": "Certificate Services published the CA certificate to Active Directory Domain Services."
+	},
+	{
+		"currentEventId": "4898",
+		"legacyEventId": "802",
+		"criticality": "Low",
+		"summary": "Certificate Services loaded a template."
+	},
+	{
+		"currentEventId": "4902",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "The Per-user audit policy table was created."
+	},
+	{
+		"currentEventId": "4904",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "An attempt was made to register a security event source."
+	},
+	{
+		"currentEventId": "4905",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "An attempt was made to unregister a security event source."
+	},
+	{
+		"currentEventId": "4909",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "The local policy settings for the TBS were changed."
+	},
+	{
+		"currentEventId": "4910",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "The Group Policy settings for the TBS were changed."
+	},
+	{
+		"currentEventId": "4928",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "An Active Directory replica source naming context was established."
+	},
+	{
+		"currentEventId": "4929",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "An Active Directory replica source naming context was removed."
+	},
+	{
+		"currentEventId": "4930",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "An Active Directory replica source naming context was modified."
+	},
+	{
+		"currentEventId": "4931",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "An Active Directory replica destination naming context was modified."
+	},
+	{
+		"currentEventId": "4932",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "Synchronization of a replica of an Active Directory naming context has begun."
+	},
+	{
+		"currentEventId": "4933",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "Synchronization of a replica of an Active Directory naming context has ended."
+	},
+	{
+		"currentEventId": "4934",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "Attributes of an Active Directory object were replicated."
+	},
+	{
+		"currentEventId": "4935",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "Replication failure begins."
+	},
+	{
+		"currentEventId": "4936",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "Replication failure ends."
+	},
+	{
+		"currentEventId": "4937",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "A lingering object was removed from a replica."
+	},
+	{
+		"currentEventId": "4944",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "The following policy was active when the Windows Firewall started."
+	},
+	{
+		"currentEventId": "4945",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "A rule was listed when the Windows Firewall started."
+	},
+	{
+		"currentEventId": "4946",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "A change has been made to Windows Firewall exception list. A rule was added."
+	},
+	{
+		"currentEventId": "4947",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "A change has been made to Windows Firewall exception list. A rule was modified."
+	},
+	{
+		"currentEventId": "4948",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "A change has been made to Windows Firewall exception list. A rule was deleted."
+	},
+	{
+		"currentEventId": "4949",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "Windows Firewall settings were restored to the default values."
+	},
+	{
+		"currentEventId": "4950",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "A Windows Firewall setting has changed."
+	},
+	{
+		"currentEventId": "4951",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "A rule has been ignored because its major version number was not recognized by Windows Firewall."
+	},
+	{
+		"currentEventId": "4952",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "Parts of a rule have been ignored because its minor version number was not recognized by Windows Firewall. The other parts of the rule will be enforced."
+	},
+	{
+		"currentEventId": "4953",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "A rule has been ignored by Windows Firewall because it could not parse the rule."
+	},
+	{
+		"currentEventId": "4954",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "Windows Firewall Group Policy settings have changed. The new settings have been applied."
+	},
+	{
+		"currentEventId": "4956",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "Windows Firewall has changed the active profile."
+	},
+	{
+		"currentEventId": "4957",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "Windows Firewall did not apply the following rule."
+	},
+	{
+		"currentEventId": "4958",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "Windows Firewall did not apply the following rule because the rule referred to items not configured on this computer."
+	},
+	{
+		"currentEventId": "4979",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "IPsec Main Mode and Extended Mode security associations were established."
+	},
+	{
+		"currentEventId": "4980",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "IPsec Main Mode and Extended Mode security associations were established."
+	},
+	{
+		"currentEventId": "4981",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "IPsec Main Mode and Extended Mode security associations were established."
+	},
+	{
+		"currentEventId": "4982",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "IPsec Main Mode and Extended Mode security associations were established."
+	},
+	{
+		"currentEventId": "4985",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "The state of a transaction has changed."
+	},
+	{
+		"currentEventId": "5024",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "The Windows Firewall Service has started successfully."
+	},
+	{
+		"currentEventId": "5025",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "The Windows Firewall Service has been stopped."
+	},
+	{
+		"currentEventId": "5031",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "The Windows Firewall Service blocked an application from accepting incoming connections on the network."
+	},
+	{
+		"currentEventId": "5032",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "Windows Firewall was unable to notify the user that it blocked an application from accepting incoming connections on the network."
+	},
+	{
+		"currentEventId": "5033",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "The Windows Firewall Driver has started successfully."
+	},
+	{
+		"currentEventId": "5034",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "The Windows Firewall Driver has been stopped."
+	},
+	{
+		"currentEventId": "5039",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "A registry key was virtualized."
+	},
+	{
+		"currentEventId": "5040",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "A change has been made to IPsec settings. An Authentication Set was added."
+	},
+	{
+		"currentEventId": "5041",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "A change has been made to IPsec settings. An Authentication Set was modified."
+	},
+	{
+		"currentEventId": "5042",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "A change has been made to IPsec settings. An Authentication Set was deleted."
+	},
+	{
+		"currentEventId": "5043",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "A change has been made to IPsec settings. A Connection Security Rule was added."
+	},
+	{
+		"currentEventId": "5044",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "A change has been made to IPsec settings. A Connection Security Rule was modified."
+	},
+	{
+		"currentEventId": "5045",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "A change has been made to IPsec settings. A Connection Security Rule was deleted."
+	},
+	{
+		"currentEventId": "5046",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "A change has been made to IPsec settings. A Crypto Set was added."
+	},
+	{
+		"currentEventId": "5047",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "A change has been made to IPsec settings. A Crypto Set was modified."
+	},
+	{
+		"currentEventId": "5048",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "A change has been made to IPsec settings. A Crypto Set was deleted."
+	},
+	{
+		"currentEventId": "5050",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "An attempt to programmatically disable the Windows Firewall using a call to InetFwProfile.FirewallEnabled(False)."
+	},
+	{
+		"currentEventId": "5051",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "A file was virtualized."
+	},
+	{
+		"currentEventId": "5056",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "A cryptographic self test was performed."
+	},
+	{
+		"currentEventId": "5057",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "A cryptographic primitive operation failed."
+	},
+	{
+		"currentEventId": "5058",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "Key file operation."
+	},
+	{
+		"currentEventId": "5059",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "Key migration operation."
+	},
+	{
+		"currentEventId": "5060",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "Verification operation failed."
+	},
+	{
+		"currentEventId": "5061",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "Cryptographic operation."
+	},
+	{
+		"currentEventId": "5062",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "A kernel-mode cryptographic self test was performed."
+	},
+	{
+		"currentEventId": "5063",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "A cryptographic provider operation was attempted."
+	},
+	{
+		"currentEventId": "5064",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "A cryptographic context operation was attempted."
+	},
+	{
+		"currentEventId": "5065",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "A cryptographic context modification was attempted."
+	},
+	{
+		"currentEventId": "5066",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "A cryptographic function operation was attempted."
+	},
+	{
+		"currentEventId": "5067",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "A cryptographic function modification was attempted."
+	},
+	{
+		"currentEventId": "5068",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "A cryptographic function provider operation was attempted."
+	},
+	{
+		"currentEventId": "5069",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "A cryptographic function property operation was attempted."
+	},
+	{
+		"currentEventId": "5070",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "A cryptographic function property modification was attempted."
+	},
+	{
+		"currentEventId": "5125",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "A request was submitted to the OCSP Responder Service."
+	},
+	{
+		"currentEventId": "5126",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "Signing Certificate was automatically updated by the OCSP Responder Service."
+	},
+	{
+		"currentEventId": "5127",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "The OCSP Revocation Provider successfully updated the revocation information."
+	},
+	{
+		"currentEventId": "5136",
+		"legacyEventId": "566",
+		"criticality": "Low",
+		"summary": "A directory service object was modified."
+	},
+	{
+		"currentEventId": "5137",
+		"legacyEventId": "566",
+		"criticality": "Low",
+		"summary": "A directory service object was created."
+	},
+	{
+		"currentEventId": "5138",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "A directory service object was undeleted."
+	},
+	{
+		"currentEventId": "5139",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "A directory service object was moved."
+	},
+	{
+		"currentEventId": "5140",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "A network share object was accessed."
+	},
+	{
+		"currentEventId": "5141",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "A directory service object was deleted."
+	},
+	{
+		"currentEventId": "5152",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "The Windows Filtering Platform blocked a packet."
+	},
+	{
+		"currentEventId": "5153",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "A more restrictive Windows Filtering Platform filter has blocked a packet."
+	},
+	{
+		"currentEventId": "5154",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "The Windows Filtering Platform has permitted an application or service to listen on a port for incoming connections."
+	},
+	{
+		"currentEventId": "5155",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "The Windows Filtering Platform has blocked an application or service from listening on a port for incoming connections."
+	},
+	{
+		"currentEventId": "5156",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "The Windows Filtering Platform has allowed a connection."
+	},
+	{
+		"currentEventId": "5157",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "The Windows Filtering Platform has blocked a connection."
+	},
+	{
+		"currentEventId": "5158",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "The Windows Filtering Platform has permitted a bind to a local port."
+	},
+	{
+		"currentEventId": "5159",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "The Windows Filtering Platform has blocked a bind to a local port."
+	},
+	{
+		"currentEventId": "5378",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "The requested credentials delegation was disallowed by policy."
+	},
+	{
+		"currentEventId": "5440",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "The following callout was present when the Windows Filtering Platform Base Filtering Engine started."
+	},
+	{
+		"currentEventId": "5441",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "The following filter was present when the Windows Filtering Platform Base Filtering Engine started."
+	},
+	{
+		"currentEventId": "5442",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "The following provider was present when the Windows Filtering Platform Base Filtering Engine started."
+	},
+	{
+		"currentEventId": "5443",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "The following provider context was present when the Windows Filtering Platform Base Filtering Engine started."
+	},
+	{
+		"currentEventId": "5444",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "The following sublayer was present when the Windows Filtering Platform Base Filtering Engine started."
+	},
+	{
+		"currentEventId": "5446",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "A Windows Filtering Platform callout has been changed."
+	},
+	{
+		"currentEventId": "5447",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "A Windows Filtering Platform filter has been changed."
+	},
+	{
+		"currentEventId": "5448",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "A Windows Filtering Platform provider has been changed."
+	},
+	{
+		"currentEventId": "5449",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "A Windows Filtering Platform provider context has been changed."
+	},
+	{
+		"currentEventId": "5450",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "A Windows Filtering Platform sublayer has been changed."
+	},
+	{
+		"currentEventId": "5451",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "An IPsec Quick Mode security association was established."
+	},
+	{
+		"currentEventId": "5452",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "An IPsec Quick Mode security association ended."
+	},
+	{
+		"currentEventId": "5456",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "PAStore Engine applied Active Directory storage IPsec policy on the computer."
+	},
+	{
+		"currentEventId": "5457",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "PAStore Engine failed to apply Active Directory storage IPsec policy on the computer."
+	},
+	{
+		"currentEventId": "5458",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "PAStore Engine applied locally cached copy of Active Directory storage IPsec policy on the computer."
+	},
+	{
+		"currentEventId": "5459",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "PAStore Engine failed to apply locally cached copy of Active Directory storage IPsec policy on the computer."
+	},
+	{
+		"currentEventId": "5460",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "PAStore Engine applied local registry storage IPsec policy on the computer."
+	},
+	{
+		"currentEventId": "5461",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "PAStore Engine failed to apply local registry storage IPsec policy on the computer."
+	},
+	{
+		"currentEventId": "5462",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "PAStore Engine failed to apply some rules of the active IPsec policy on the computer. Use the IP Security Monitor snap-in to diagnose the problem."
+	},
+	{
+		"currentEventId": "5463",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "PAStore Engine polled for changes to the active IPsec policy and detected no changes."
+	},
+	{
+		"currentEventId": "5464",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "PAStore Engine polled for changes to the active IPsec policy, detected changes, and applied them to IPsec Services."
+	},
+	{
+		"currentEventId": "5465",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "PAStore Engine received a control for forced reloading of IPsec policy and processed the control successfully."
+	},
+	{
+		"currentEventId": "5466",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "PAStore Engine polled for changes to the Active Directory IPsec policy, determined that Active Directory cannot be reached, and will use the cached copy of the Active Directory IPsec policy instead. Any changes made to the Active Directory IPsec policy since the last poll could not be applied."
+	},
+	{
+		"currentEventId": "5467",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "PAStore Engine polled for changes to the Active Directory IPsec policy, determined that Active Directory can be reached, and found no changes to the policy. The cached copy of the Active Directory IPsec policy is no longer being used."
+	},
+	{
+		"currentEventId": "5468",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "PAStore Engine polled for changes to the Active Directory IPsec policy, determined that Active Directory can be reached, found changes to the policy, and applied those changes. The cached copy of the Active Directory IPsec policy is no longer being used."
+	},
+	{
+		"currentEventId": "5471",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "PAStore Engine loaded local storage IPsec policy on the computer."
+	},
+	{
+		"currentEventId": "5472",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "PAStore Engine failed to load local storage IPsec policy on the computer."
+	},
+	{
+		"currentEventId": "5473",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "PAStore Engine loaded directory storage IPsec policy on the computer."
+	},
+	{
+		"currentEventId": "5474",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "PAStore Engine failed to load directory storage IPsec policy on the computer."
+	},
+	{
+		"currentEventId": "5477",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "PAStore Engine failed to add quick mode filter."
+	},
+	{
+		"currentEventId": "5479",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "IPsec Services has been shut down successfully. The shutdown of IPsec Services can put the computer at greater risk of network attack or expose the computer to potential security risks."
+	},
+	{
+		"currentEventId": "5632",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "A request was made to authenticate to a wireless network."
+	},
+	{
+		"currentEventId": "5633",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "A request was made to authenticate to a wired network."
+	},
+	{
+		"currentEventId": "5712",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "A Remote Procedure Call (RPC) was attempted."
+	},
+	{
+		"currentEventId": "5888",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "An object in the COM+ Catalog was modified."
+	},
+	{
+		"currentEventId": "5889",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "An object was deleted from the COM+ Catalog."
+	},
+	{
+		"currentEventId": "5890",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "An object was added to the COM+ Catalog."
+	},
+	{
+		"currentEventId": "6008",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "The previous system shutdown was unexpected."
+	},
+	{
+		"currentEventId": "6144",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "Security policy in the Group Policy objects has been applied successfully."
+	},
+	{
+		"currentEventId": "6272",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "Network Policy Server granted access to a user."
+	},
+	{
+		"currentEventId": null,
+		"legacyEventId": "561",
+		"criticality": "Low",
+		"summary": "A handle to an object was requested."
+	},
+	{
+		"currentEventId": null,
+		"legacyEventId": "563",
+		"criticality": "Low",
+		"summary": "Object open for delete."
+	},
+	{
+		"currentEventId": null,
+		"legacyEventId": "625",
+		"criticality": "Low",
+		"summary": "User Account Type Changed."
+	},
+	{
+		"currentEventId": null,
+		"legacyEventId": "613",
+		"criticality": "Low",
+		"summary": "IPsec policy agent started."
+	},
+	{
+		"currentEventId": null,
+		"legacyEventId": "614",
+		"criticality": "Low",
+		"summary": "IPsec policy agent disabled."
+	},
+	{
+		"currentEventId": null,
+		"legacyEventId": "615",
+		"criticality": "Low",
+		"summary": "IPsec policy agent."
+	},
+	{
+		"currentEventId": null,
+		"legacyEventId": "616",
+		"criticality": "Low",
+		"summary": "IPsec policy agent encountered a potential serious failure."
+	},
+	{
+		"currentEventId": "24577",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "Encryption of volume started."
+	},
+	{
+		"currentEventId": "24578",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "Encryption of volume stopped."
+	},
+	{
+		"currentEventId": "24579",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "Encryption of volume completed."
+	},
+	{
+		"currentEventId": "24580",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "Decryption of volume started."
+	},
+	{
+		"currentEventId": "24581",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "Decryption of volume stopped."
+	},
+	{
+		"currentEventId": "24582",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "Decryption of volume completed."
+	},
+	{
+		"currentEventId": "24583",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "Conversion worker thread for volume started."
+	},
+	{
+		"currentEventId": "24584",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "Conversion worker thread for volume temporarily stopped."
+	},
+	{
+		"currentEventId": "24588",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "The conversion operation on volume %2 encountered a bad sector error. Please validate the data on this volume."
+	},
+	{
+		"currentEventId": "24595",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "Volume %2 contains bad clusters. These clusters will be skipped during conversion."
+	},
+	{
+		"currentEventId": "24621",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "Initial state check: Rolling volume conversion transaction on %2."
+	},
+	{
+		"currentEventId": "5049",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "An IPsec Security Association was deleted."
+	},
+	{
+		"currentEventId": "5478",
+		"legacyEventId": null,
+		"criticality": "Low",
+		"summary": "IPsec Services has started successfully."
+	}
+]

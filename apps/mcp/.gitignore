@@ -1,6 +1,5 @@
 node_modules/
 dist
-generated
 .xmcp
 xmcp-env.d.ts
 .env
