@@ -1,0 +1,4 @@
+{
+	"name": "Windows event IDs to monitor",
+	"description": "Windows Server event IDs recommended for security monitoring. Each entry has its current and legacy event ID, criticality and a summary of what the event means."
+}

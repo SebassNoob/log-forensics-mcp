@@ -1,0 +1,4 @@
+{
+	"name": "MITRE ATT&CK tactics",
+	"description": "Enterprise ATT&CK tactics, the adversary goals techniques are grouped under. Each entry has its tactic ID, name, shortname and description."
+}

@@ -1,6 +1,3 @@
-import { mkdir, writeFile } from "node:fs/promises";
-import { join } from "node:path";
-
 type MonitoredEvent = {
 	currentEventId: string | null;
 	legacyEventId: string | null;
@@ -35,26 +32,20 @@ function parseEventIdTable(html: string): MonitoredEvent[] {
 
 	const normalize = (value: string) => (value === "N/A" || value === "-" ? null : value);
 
-	return [...table.matchAll(/<tr>([\s\S]*?)<\/tr>/g)]
-		.slice(1)
-		.map(([, row]) => {
-			const [currentEventId, legacyEventId, criticality, summary] = [
-				...row.matchAll(/<td>([\s\S]*?)<\/td>/g),
-			].map((m) => m[1].trim());
+	return [...table.matchAll(/<tr>([\s\S]*?)<\/tr>/g)].slice(1).map(([, row]) => {
+		const [currentEventId, legacyEventId, criticality, summary] = [
+			...row.matchAll(/<td>([\s\S]*?)<\/td>/g),
+		].map((m) => m[1].trim());
 
-			return {
-				currentEventId: normalize(currentEventId),
-				legacyEventId: normalize(legacyEventId),
-				criticality,
-				summary,
-			};
-		});
+		return {
+			currentEventId: normalize(currentEventId),
+			legacyEventId: normalize(legacyEventId),
+			criticality,
+			summary,
+		};
+	});
 }
 
-export async function generateEventIds(outputDir: string) {
-	const html = await fetchEventIdTableHtml(sourceUrl);
-	const events = parseEventIdTable(html);
-
-	await mkdir(outputDir, { recursive: true });
-	await writeFile(join(outputDir, "windows-event-ids.json"), JSON.stringify(events, null, "\t"));
+export async function generateEventIds() {
+	return parseEventIdTable(await fetchEventIdTableHtml(sourceUrl));
 }

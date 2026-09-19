@@ -1,9 +1,3 @@
-import { writeFile } from "node:fs";
-import { join } from "node:path";
-import { promisify } from "node:util";
-
-const writeFileAsync = promisify(writeFile);
-
 type StixObject = {
 	type: string;
 	name: string;
@@ -18,83 +12,56 @@ type StixObject = {
 	external_references?: { source_name: string; external_id?: string; url?: string }[];
 };
 
-async function fetchAttackData(stixUrl: string): Promise<StixObject[]> {
-	const response = await fetch(stixUrl);
+const stixUrl =
+	"https://raw.githubusercontent.com/mitre-attack/attack-stix-data/master/enterprise-attack/enterprise-attack.json";
 
-	const body = await response.json();
+// The bundle is tens of megabytes, so both generators share one fetch.
+let bundle: Promise<StixObject[]> | undefined;
 
-	if (!response.ok) {
-		throw new Error(`${response.status} ${body}`);
-	}
+function fetchAttackData(): Promise<StixObject[]> {
+	bundle ??= fetch(stixUrl).then(async (response) => {
+		const body = await response.json();
 
-	return body.objects;
+		if (!response.ok) {
+			throw new Error(`${response.status} ${body}`);
+		}
+
+		return body.objects;
+	});
+
+	return bundle;
 }
 
-async function parseAttackTechniques(
-	data: StixObject[],
-): Promise<{ id: string; name: string; description: string }[]> {
-	const attackPattern: StixObject[] = data.filter(
-		(obj: Record<string, unknown>) => "type" in obj && obj.type === "attack-pattern",
-	);
+const attackId = (obj: StixObject) =>
+	obj.external_references?.find((r) => r.source_name === "mitre-attack")?.external_id;
 
-	const techniques = attackPattern
-		.filter((obj) => !obj.revoked && !obj.x_mitre_deprecated)
-		.map((obj) => {
-			const id = obj.external_references?.find(
-				(r) => r.source_name === "mitre-attack",
-			)?.external_id;
-			return id ? { id, name: obj.name, description: obj.description ?? "" } : null;
-		})
-		.filter((t): t is { id: string; name: string; description: string } => t !== null);
+export async function generateAttackTechniques() {
+	const data = await fetchAttackData();
 
-	return techniques;
+	return data
+		.filter((obj) => obj.type === "attack-pattern" && !obj.revoked && !obj.x_mitre_deprecated)
+		.flatMap((obj) => {
+			const id = attackId(obj);
+			return id ? [{ id, name: obj.name, description: obj.description ?? "" }] : [];
+		});
 }
 
-async function parseAttackTactics(
-	data: StixObject[],
-): Promise<{ id: string; name: string; shortname: string; description: string }[]> {
-	const tacticObjects: StixObject[] = data.filter(
-		(obj: Record<string, unknown>) => "type" in obj && obj.type === "x-mitre-tactic",
-	);
+export async function generateAttackTactics() {
+	const data = await fetchAttackData();
 
-	const tactics = tacticObjects
-		.filter((obj) => !obj.revoked && !obj.x_mitre_deprecated)
-		.map((obj) => {
-			const id = obj.external_references?.find(
-				(r) => r.source_name === "mitre-attack",
-			)?.external_id;
+	return data
+		.filter((obj) => obj.type === "x-mitre-tactic" && !obj.revoked && !obj.x_mitre_deprecated)
+		.flatMap((obj) => {
+			const id = attackId(obj);
 			return id
-				? {
-						id,
-						name: obj.name,
-						shortname: obj.x_mitre_shortname ?? "",
-						description: obj.description ?? "",
-					}
-				: null;
-		})
-		.filter(
-			(t): t is { id: string; name: string; shortname: string; description: string } => t !== null,
-		);
-
-	return tactics;
-}
-
-export async function generateAttackData(outputDir: string) {
-	const stixUrl =
-		"https://raw.githubusercontent.com/mitre-attack/attack-stix-data/master/enterprise-attack/enterprise-attack.json";
-
-	const data = await fetchAttackData(stixUrl);
-
-	const [techniques, tactics] = await Promise.all([
-		parseAttackTechniques(data),
-		parseAttackTactics(data),
-	]);
-
-	await Promise.all([
-		writeFileAsync(
-			join(outputDir, "attack-techniques.json"),
-			JSON.stringify(techniques, null, "\t"),
-		),
-		writeFileAsync(join(outputDir, "attack-tactics.json"), JSON.stringify(tactics, null, "\t")),
-	]);
+				? [
+						{
+							id,
+							name: obj.name,
+							shortname: obj.x_mitre_shortname ?? "",
+							description: obj.description ?? "",
+						},
+					]
+				: [];
+		});
 }

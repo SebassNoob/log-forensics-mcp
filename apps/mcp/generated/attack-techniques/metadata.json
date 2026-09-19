@@ -1,0 +1,4 @@
+{
+	"name": "MITRE ATT&CK techniques",
+	"description": "Enterprise ATT&CK techniques and sub-techniques. Each entry has its technique ID, name and description."
+}
