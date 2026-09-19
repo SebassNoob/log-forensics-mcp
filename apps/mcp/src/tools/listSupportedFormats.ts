@@ -1,5 +1,5 @@
 import type { ToolMetadata } from "xmcp";
-import { defaultPlugins } from "../load";
+import { defaultPlugins } from "@/load";
 
 export const metadata: ToolMetadata = {
 	name: "list_supported_formats",

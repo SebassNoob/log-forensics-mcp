@@ -28,8 +28,19 @@ const config: XmcpConfig = {
 	template: {
 		name: "log-forensics-mcp",
 		description: "MCP server for log forensics. Allows searching and reading supported log files.",
-		instructions:
-			"You should call `list_directory` and `list_supported_formats` to see what you can do. Search for IOCs and construct timelines with the tools `search` and `read`. Different log formats call different parsers, use `stat` to see what format a log file is in.",
+		instructions: `Call \`list_directory\` and \`list_supported_formats\` first.
+
+Use \`search\` and \`read\` to find IOCs and build timelines.
+
+Each format is handled by one plugin.
+
+The server picks the first plugin that matches the path.
+
+\`stat\` reports that plugin, plus size, timestamps, and format-specific metadata.
+
+A plugin need not implement every tool. An unsupported call errors with the plugin name.
+
+\`read\` and \`search\` return rows. A row is one record of the format (a csv row, an event, a packet), not one line of the file.`,
 	},
 };
 
