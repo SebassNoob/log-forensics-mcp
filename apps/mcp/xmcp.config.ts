@@ -2,7 +2,8 @@ import type { RspackOptions } from "@rspack/core";
 import type { XmcpConfig } from "xmcp";
 
 const config: XmcpConfig = {
-	http: true,
+	// xmcp resolves host at build time; 127.0.0.1 is unreachable from outside a container.
+	http: { host: "0.0.0.0" },
 	paths: {
 		tools: "./src/tools",
 		prompts: "./src/prompts",

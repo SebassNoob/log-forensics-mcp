@@ -103,12 +103,38 @@ jobs:
           path: dist/log-forensics-mcp-${{ matrix.name }}${{ matrix.ext }}
           if-no-files-found: error
 
+  image:
+    needs: [version, build]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ needs.version.outputs.version }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: log-forensics-mcp-linux-x64
+          path: dist
+
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/build-push-action@v6
+        with:
+          context: .
+          tags: log-forensics-mcp:${{ needs.version.outputs.version }}
+          outputs: type=docker,dest=image.tar
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: docker-image
+          path: image.tar
+          if-no-files-found: error
+
   release:
     needs: [version, build]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v4
         with:
+          pattern: log-forensics-mcp-*
           path: dist
           merge-multiple: true
       - uses: softprops/action-gh-release@v2
@@ -126,7 +152,5 @@ jobs:
           ref: ${{ needs.version.outputs.version }}
       - uses: oven-sh/setup-bun@v2
       - env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: |
-          echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
-          bun publish
+          NPM_CONFIG_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: bun publish

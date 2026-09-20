@@ -31,11 +31,23 @@ if (!existsSync(binary)) {
 		process.exit(1);
 	}
 
+	const total = Number(response.headers.get("content-length"));
+	async function* withProgress(body) {
+		let done = 0;
+		for await (const chunk of body) {
+			done += chunk.length;
+			if (total) process.stderr.write(`\r[${done}/${total} bytes] ${Math.floor((done / total) * 100)}%`);
+			yield chunk;
+		}
+		if (total) process.stderr.write("\n");
+	}
+
 	mkdirSync(cacheDir, { recursive: true });
 	// Downloaded to a unique path first so concurrent first runs cannot exec a partial file.
 	const partial = `${binary}.${process.pid}`;
-	await writeFile(partial, response.body, { mode: 0o755 });
+	await writeFile(partial, withProgress(response.body), { mode: 0o755 });
 	renameSync(partial, binary);
+	console.error(`Done. Wrote to ${binary}.`);
 }
 
 const { status, error } = spawnSync(binary, process.argv.slice(2), { stdio: "inherit" });

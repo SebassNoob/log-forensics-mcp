@@ -1,5 +1,6 @@
 {
 	"baseBranch": "master",
+	"changelog": false,
 	"fixed": [["*"]],
 	"privatePackages": { "version": true, "tag": false }
 }
