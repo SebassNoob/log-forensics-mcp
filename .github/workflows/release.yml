@@ -116,3 +116,17 @@ jobs:
           tag_name: ${{ needs.version.outputs.version }}
           files: dist/*
           generate_release_notes: true
+
+  publish:
+    needs: [version, release]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ needs.version.outputs.version }}
+      - uses: oven-sh/setup-bun@v2
+      - env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
+          bun publish
