@@ -17,6 +17,7 @@
 	},
 	"dependencies": {
 		"csv-plugin": "workspace:*",
+		"env-paths": "^4.0.0",
 		"evtx-plugin": "workspace:*",
 		"journal-plugin": "workspace:*",
 		"minisearch": "^7.2.0",

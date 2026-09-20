@@ -13,9 +13,10 @@
     },
     "apps/mcp": {
       "name": "mcp",
-      "version": "0.1.0",
+      "version": "0.2.1",
       "dependencies": {
         "csv-plugin": "workspace:*",
+        "env-paths": "^4.0.0",
         "evtx-plugin": "workspace:*",
         "journal-plugin": "workspace:*",
         "minisearch": "^7.2.0",
@@ -33,7 +34,7 @@
     },
     "packages/csv-plugin": {
       "name": "csv-plugin",
-      "version": "0.1.0",
+      "version": "0.2.1",
       "dependencies": {
         "utils": "workspace:*",
       },
@@ -43,7 +44,7 @@
     },
     "packages/evtx-plugin": {
       "name": "evtx-plugin",
-      "version": "0.1.0",
+      "version": "0.2.1",
       "dependencies": {
         "utils": "workspace:*",
       },
@@ -53,7 +54,7 @@
     },
     "packages/journal-plugin": {
       "name": "journal-plugin",
-      "version": "0.1.0",
+      "version": "0.2.1",
       "dependencies": {
         "utils": "workspace:*",
       },
@@ -63,7 +64,7 @@
     },
     "packages/pcap-plugin": {
       "name": "pcap-plugin",
-      "version": "0.1.0",
+      "version": "0.2.1",
       "dependencies": {
         "utils": "workspace:*",
       },
@@ -73,7 +74,7 @@
     },
     "packages/plaintext-plugin": {
       "name": "plaintext-plugin",
-      "version": "0.1.0",
+      "version": "0.2.1",
       "dependencies": {
         "utils": "workspace:*",
       },
@@ -83,7 +84,7 @@
     },
     "packages/reg-plugin": {
       "name": "reg-plugin",
-      "version": "0.1.0",
+      "version": "0.2.1",
       "dependencies": {
         "utils": "workspace:*",
       },
@@ -93,7 +94,7 @@
     },
     "packages/utils": {
       "name": "utils",
-      "version": "0.1.0",
+      "version": "0.2.1",
     },
   },
   "packages": {
@@ -483,7 +484,7 @@
 
     "debug": ["debug@4.4.3", "", { "dependencies": { "ms": "^2.1.3" } }, "sha512-RGwwWnwQvkVfavKVt22FGLw+xYSdzARwm0ru6DhTVA3umU5hZc28V3kO4stgYryrTlLpuvgI9GiijltAjNbcqA=="],
 
-    "env-paths": ["env-paths@2.2.1", "", {}, "sha512-+h1lkLKhZMTYjog1VEpJNG7NZJWcuc2DDk/qsqSTRRCOXiLjeQ1d1/udrUGhqMxUgAlwKNZ0cf2uqan5GLuS2A=="],
+    "env-paths": ["env-paths@4.0.0", "", { "dependencies": { "is-safe-filename": "^0.1.0" } }, "sha512-pxP8eL2SwwaTRi/KHYwLYXinDs7gL3jxFcBYmEdYfZmZXbaVDvdppd0XBU8qVz03rDfKZMXg1omHCbsJjZrMsw=="],
 
     "error-ex": ["error-ex@1.3.4", "", { "dependencies": { "is-arrayish": "^0.2.1" } }, "sha512-sqQamAnR14VgCr1A618A3sGrygcpK+HEbenA/HiEAkkUwcZIIB/tgWqHFxWgOyDh4nB4JCRimh79dR5Ywc9MDQ=="],
 
@@ -526,6 +527,8 @@
     "is-glob": ["is-glob@4.0.3", "", { "dependencies": { "is-extglob": "^2.1.1" } }, "sha512-xelSayHH36ZgE7ZWhli7pW34hNbNl8Ojv5KVmkJD4hBdD3th8Tfk9vYasLM+mXWOZhFkgZfxhLSnrwRr4elSSg=="],
 
     "is-number": ["is-number@7.0.0", "", {}, "sha512-41Cifkg6e8TylSpdtTpeLVMqvSBEVzTttHvERD741+pnZ8ANv0004MRL43QKPDlK9cGvNp6NZWZUBlbGXYxxng=="],
+
+    "is-safe-filename": ["is-safe-filename@0.1.1", "", {}, "sha512-4SrR7AdnY11LHfDKTZY1u6Ga3RuxZdl3YKWWShO5iyuG5h8QS4GD2tOb04peBJ5I7pXbR+CGBNEhTcwK+FzN3g=="],
 
     "jiti": ["jiti@2.7.0", "", { "bin": { "jiti": "lib/jiti-cli.mjs" } }, "sha512-AC/7JofJvZGrrneWNaEnJeOLUx+JlGt7tNa0wZiRPT4MY1wmfKjt2+6O2p2uz2+skll8OZZmJMNqeke7kKbNgQ=="],
 
@@ -658,6 +661,8 @@
     "@xmcp-dev/compiler/typescript": ["typescript@5.9.3", "", { "bin": { "tsc": "bin/tsc", "tsserver": "bin/tsserver" } }, "sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw=="],
 
     "anymatch/picomatch": ["picomatch@2.3.2", "", {}, "sha512-V7+vQEJ06Z+c5tSye8S+nHUfI51xoXIXjHQ99cQtKUkQqqO1kO/KCJUfZXuB47h/YBlDhah2H3hdUGXn8ie0oA=="],
+
+    "cosmiconfig/env-paths": ["env-paths@2.2.1", "", {}, "sha512-+h1lkLKhZMTYjog1VEpJNG7NZJWcuc2DDk/qsqSTRRCOXiLjeQ1d1/udrUGhqMxUgAlwKNZ0cf2uqan5GLuS2A=="],
 
     "readdirp/picomatch": ["picomatch@2.3.2", "", {}, "sha512-V7+vQEJ06Z+c5tSye8S+nHUfI51xoXIXjHQ99cQtKUkQqqO1kO/KCJUfZXuB47h/YBlDhah2H3hdUGXn8ie0oA=="],
 
