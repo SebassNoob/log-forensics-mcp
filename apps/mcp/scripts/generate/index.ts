@@ -6,7 +6,7 @@ import { generateEventIds } from "./generate-event-ids";
 import { generatePorts } from "./generate-ports";
 import { generateSysmonEventIds } from "./generate-sysmon-event-ids";
 
-const outputDir = join(__dirname, "../generated");
+const outputDir = join(__dirname, "../../generated");
 const outputModel = z.array(z.record(z.string(), z.unknown()));
 
 const datasets = {

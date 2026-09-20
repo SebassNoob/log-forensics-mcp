@@ -2,9 +2,12 @@ name: release
 
 on:
   workflow_dispatch:
-  push:
-    tags:
-      - '**'
+    inputs:
+      bump:
+        description: Version bump
+        type: choice
+        options: [patch, minor, major]
+        default: patch
 
 permissions:
   contents: write
@@ -14,7 +17,46 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  version:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install --frozen-lockfile
+
+      # `fixed: [["*"]]` in .changeset/config.json versions every package in lockstep,
+      # so one entry bumps the whole monorepo.
+      - run: |
+          cat > .changeset/release.md <<'EOF'
+          ---
+          "mcp": ${{ inputs.bump }}
+          ---
+
+          Release
+          EOF
+
+      - run: bunx changeset version
+      - run: bun install --lockfile-only
+
+      - id: version
+        run: echo "version=$(bun -e 'console.log(require("./apps/mcp/package.json").version)')" >> "$GITHUB_OUTPUT"
+
+      - env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          # changesets only versions workspace packages, so sync the published root manifest.
+          bun pm pkg set version="$VERSION"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -m "chore: release $VERSION"
+          git tag -a "$VERSION" -m "$VERSION"
+          git push --follow-tags
+
   build:
+    needs: version
     name: ${{ matrix.name }}
     runs-on: ${{ matrix.runner }}
     strategy:
@@ -28,17 +70,23 @@ jobs:
           - { name: windows-x64, runner: windows-latest, ext: .exe }
     steps:
       - uses: actions/checkout@v5
+        with:
+          ref: ${{ needs.version.outputs.version }}
       - uses: oven-sh/setup-bun@v2
       - uses: dtolnay/rust-toolchain@stable
+      # Each package under packages/ is its own Cargo workspace with its own target dir.
+      - id: rust-workspaces
+        shell: bash
+        run: |
+          {
+            echo 'paths<<EOF'
+            for f in packages/*/Cargo.toml; do dirname "$f"; done
+            echo EOF
+          } >> "$GITHUB_OUTPUT"
+
       - uses: Swatinem/rust-cache@v2
         with:
-          # Each plugin is its own Cargo workspace with its own target dir.
-          workspaces: |
-            packages/csv-plugin
-            packages/evtx-plugin
-            packages/journal-plugin
-            packages/pcap-plugin
-            packages/plaintext-plugin
+          workspaces: ${{ steps.rust-workspaces.outputs.paths }}
           key: ${{ matrix.name }}
 
       - run: bun install --frozen-lockfile
@@ -56,8 +104,7 @@ jobs:
           if-no-files-found: error
 
   release:
-    needs: build
-    if: startsWith(github.ref, 'refs/tags/')
+    needs: [version, build]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v4
@@ -66,5 +113,6 @@ jobs:
           merge-multiple: true
       - uses: softprops/action-gh-release@v2
         with:
+          tag_name: ${{ needs.version.outputs.version }}
           files: dist/*
           generate_release_notes: true

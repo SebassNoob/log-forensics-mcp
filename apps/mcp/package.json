@@ -8,7 +8,7 @@
 	},
 	"scripts": {
 		"build": "XMCP_TELEMETRY_DISABLED=true xmcp build",
-		"generate": "bun scripts/generate.ts",
+		"generate": "bun scripts/generate/index.ts",
 		"dev": "XMCP_TELEMETRY_DISABLED=true xmcp dev",
 		"start": "bun run dist/http.js",
 		"check-types": "tsgo --noEmit",
