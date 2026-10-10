@@ -26,8 +26,6 @@ jobs:
       - uses: oven-sh/setup-bun@v2
       - run: bun install --frozen-lockfile
 
-      # `fixed: [["*"]]` in .changeset/config.json versions every package in lockstep,
-      # so one entry bumps the whole monorepo.
       - run: |
           cat > .changeset/release.md <<'EOF'
           ---
@@ -152,8 +150,10 @@ jobs:
           ref: ${{ needs.version.outputs.version }}
       - uses: oven-sh/setup-bun@v2
       - env:
-          NPM_CONFIG_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
+          trap 'rm -f .npmrc' EXIT
+          printf '//registry.npmjs.org/:_authToken=%s\n' "$NPM_TOKEN" > .npmrc
           bun build apps/mcp/scripts/release/bin.ts \
             --target node \
             --outfile bin.mjs
