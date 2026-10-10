@@ -2,7 +2,90 @@
 
 MCP server for log forensics. Allows searching and reading supported log files.
 
-## Quick start
+## Quick Start
+
+### Claude Desktop
+
+Start the server with `bunx log-forensics-mcp`, then add the remote MCP server
+to Claude Desktop's configuration file:
+
+
+```json
+{
+  "mcpServers": {
+    "log-forensics": {
+      "command": "npx",
+      "args": ["mcp-remote", "http://localhost:3001/mcp"]
+    }
+  }
+}
+```
+
+Restart Claude Desktop after saving the file.
+
+### Codex
+
+Add this to `~/.codex/config.toml`:
+
+```toml
+[mcp_servers.log-forensics]
+url = "http://localhost:3001/mcp"
+```
+
+### Cursor
+
+Add this to `.cursor/mcp.json`:
+
+```json
+{
+  "mcpServers": {
+    "log-forensics": {
+      "url": "http://localhost:3001/mcp"
+    }
+  }
+}
+```
+
+### VS Code
+
+Add this to `.vscode/mcp.json`:
+
+```json
+{
+  "servers": {
+    "log-forensics": {
+      "type": "http",
+      "url": "http://localhost:3001/mcp"
+    }
+  }
+}
+```
+
+### Claude Code
+
+Register the server from a terminal:
+
+```sh
+claude mcp add --transport http log-forensics http://localhost:3001/mcp
+```
+
+### Other clients
+
+Use the Streamable HTTP endpoint:
+
+```text
+http://localhost:3001/mcp
+```
+
+For clients that only support launching a local command, use `mcp-remote`:
+
+```sh
+npx mcp-remote http://localhost:3001/mcp
+```
+
+## Run manually
+
+### From npm
 
 ```sh
 bunx log-forensics-mcp
@@ -12,11 +95,9 @@ The first run downloads the binary for your platform from [Releases](https://git
 
 It is cached in `~/.cache/log-forensics-mcp/<version>/`, or under `$XDG_CACHE_HOME` if that is set.
 
-The server listens on port `3001` on all interfaces.
+The server listens on `http://localhost:3001/mcp` using Streamable HTTP.
 
-The MCP endpoint is `/mcp`.
-
-## Standalone binary
+### From source
 
 Download the binary for your platform from [Releases](https://github.com/SebassNoob/log-forensics-mcp/releases), then run it:
 
@@ -24,22 +105,18 @@ Download the binary for your platform from [Releases](https://github.com/SebassN
 ./log-forensics-mcp-linux-x64
 ```
 
-This is the same binary that `bunx` downloads.
+The server listens on `http://localhost:3001/mcp`.
 
-## Run with Docker
+### From Docker
 
-Each release uploads a `docker-image` artifact. Load it and run:
+Download the `docker-image` artifact.
 
 ```sh
 docker load -i image.tar
-docker run -p 3001:3001 -v /path/to/artefacts:/data:ro log-forensics-mcp:<version>
+docker run --rm -p 3001:3001 -v /path/to/artefacts:/data:ro log-forensics-mcp:<version>
 ```
 
 Mount the logs you want to analyse read-only.
-
-The port inside the container is fixed at `3001`.
-
-Remap it to change the port you connect to, for example `-p 8080:3001` to serve on `8080`.
 
 ## Contributing
 

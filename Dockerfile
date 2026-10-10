@@ -1,5 +1,3 @@
-# The `cc` variant, not `base`: the napi addons link libgcc_s, and without it the
-# server starts but every request fails when it dlopens them.
 FROM gcr.io/distroless/cc-debian12:nonroot
 
 ARG BINARY=dist/log-forensics-mcp-linux-x64
