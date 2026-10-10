@@ -1,5 +1,6 @@
 import { readFileSync } from "node:fs";
-import { WORKSPACE_ROOT } from "@/constants";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 
 const { repository, version } = JSON.parse(
 	readFileSync(new URL("./package.json", import.meta.url), "utf8"),
@@ -13,5 +14,5 @@ const target = `${isWindows ? "windows" : process.platform}-${process.arch}`;
 
 export const VERSION = version as string;
 export const ASSET = `log-forensics-mcp-${target}${isWindows ? ".exe" : ""}`;
-export const CACHE_DIR = WORKSPACE_ROOT;
+export const CACHE_DIR = join(tmpdir(), "log-forensics-mcp", VERSION);
 export const DOWNLOAD_URL = `https://github.com/${repository.replace("github:", "")}/releases/download/${VERSION}/${ASSET}`;
