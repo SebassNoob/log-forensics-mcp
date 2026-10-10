@@ -2,6 +2,7 @@
 	"name": "mcp",
 	"version": "0.2.1",
 	"private": true,
+	"type": "module",
 	"description": "Log forensics MCP server",
 	"engines": {
 		"node": ">=22.0.0"
