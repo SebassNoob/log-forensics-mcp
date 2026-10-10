@@ -4,12 +4,7 @@ import { existsSync, mkdirSync, renameSync } from "node:fs";
 import { writeFile } from "node:fs/promises";
 import { join } from "node:path";
 
-import {
-	ASSET,
-	CACHE_DIR,
-	DOWNLOAD_URL,
-	VERSION,
-} from "./constants";
+import { ASSET, CACHE_DIR, DOWNLOAD_URL, VERSION } from "./constants";
 
 const binary = join(CACHE_DIR, ASSET);
 
@@ -27,7 +22,8 @@ if (!existsSync(binary)) {
 		let done = 0;
 		for await (const chunk of body) {
 			done += chunk.length;
-			if (total) process.stderr.write(`\r[${done}/${total} bytes] ${Math.floor((done / total) * 100)}%`);
+			if (total)
+				process.stderr.write(`\r[${done}/${total} bytes] ${Math.floor((done / total) * 100)}%`);
 			yield chunk;
 		}
 		if (total) process.stderr.write("\n");

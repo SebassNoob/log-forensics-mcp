@@ -153,4 +153,8 @@ jobs:
       - uses: oven-sh/setup-bun@v2
       - env:
           NPM_CONFIG_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: bun publish
+        run: |
+          bun build apps/mcp/scripts/release/bin.ts \
+            --target node \
+            --outfile bin.mjs
+          bun publish
